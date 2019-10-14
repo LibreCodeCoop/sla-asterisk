@@ -28,7 +28,7 @@ RUN apt-get install -y libpq-dev libzip-dev \
     && docker-php-ext-install pdo pdo_mysql mysqli \
     && docker-php-ext-install zip
 
-# Install xdebug
+# Install xdebugw
 RUN pecl install xdebug-2.8.0beta1 \
     && docker-php-ext-enable xdebug
 
@@ -37,7 +37,8 @@ RUN chmod +x /usr/bin/composer
 
 COPY config/php.ini /usr/local/etc/php/conf.d/
 WORKDIR /app
-COPY config/crontab /etc/cron.d/kaf-cron
-RUN crontab /etc/cron.d/kaf-cron
+COPY config/crontab /etc/cron.d/app-cron
+RUN chmod 0644 /etc/cron.d/app-cron
+RUN crontab /etc/cron.d/app-cron
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]

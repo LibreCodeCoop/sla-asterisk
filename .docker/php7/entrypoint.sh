@@ -7,6 +7,7 @@ if [ ! -d "vendor" ]; then
     chown -R www-data:www-data storage/ bootstrap/cache
 fi
 php .docker/php7/wait-for-mysql.php
+cron
 php vendor/bin/phinx migrate
 echo "+---------+"
 echo "| Welcome |"
