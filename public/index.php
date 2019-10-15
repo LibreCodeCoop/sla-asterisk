@@ -1752,7 +1752,7 @@ Chart.plugins.register({
         ctx.textBaseline = "middle";
         var text = chart.config.data.label,
             textX = Math.round((width - ctx.measureText(text).width) / 2),
-            textY = height / 2;
+            textY = height / 2 + 15;
         ctx.fillText(text, textX, textY);
         ctx.save();
     }
@@ -1760,7 +1760,6 @@ Chart.plugins.register({
 
 //line
 $.get( "update.php?type=<?php echo $metric['name']; ?>&queue=<?php echo $_GET['queue']; ?>", function( data ) {
-  console.log(data)
   var ctxL = document.getElementById("line-<?php echo $metric['name']; ?>").getContext('2d');
   var myLineChart = new Chart(ctxL, {
     type: 'line',
@@ -1783,19 +1782,19 @@ $.get( "update.php?type=<?php echo $metric['name']; ?>&queue=<?php echo $_GET['q
     //doughnut
     var ctxD = document.getElementById("circle-<?php echo $metric['name']; ?>").getContext('2d');
     var myLineChart = new Chart(ctxD, {
-    type: 'doughnut',
-    data: {
-        label: data.donnut.label,
-    labels: ["Atual", "Restante"],
-    datasets: [{
-    data: [data.donnut.setting, data.donnut.atual],
-    backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
-    hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
-    }]
-    },
-    options: {
-    responsive: true
-    }
+        type: 'doughnut',
+        data: {
+            label: data.donnut.label,
+            labels: ["Atual", "Restante"],
+            datasets: [{
+                data: [data.donnut.setting, data.donnut.atual],
+                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
+                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
+            }]
+        },
+        options: {
+            responsive: true
+        }
     });
 
 });<?php
