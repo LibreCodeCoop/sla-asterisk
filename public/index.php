@@ -1327,75 +1327,39 @@ body.swal2-no-backdrop .swal2-shown {
       </nav>
       <!-- End Navbar -->
       <div class="content">
-        <div class="container-fluid">
-          <div class="row graficos">
-            <div class="col-md-4">
-              <div class="card card-chart">
-                <div class="card-header">
-                  <canvas id="circle-tma"></canvas>
+        <div class="container-fluid"><?php
+        require_once '../bootstrap.php';
+        
+        $sth = $conn->prepare(
+            <<<QUERY
+SELECT metric.name
+  FROM config
+  JOIN metric ON metric.id = config.metric_id
+ WHERE queue = ?
+QUERY
+            );
+        $sth->execute([$_GET['queue']]);
+        while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {
+            $metrics[] = $row;
+            ?>
+              <div class="row graficos">
+                <div class="col-md-4">
+                  <div class="card card-chart">
+                    <div class="card-body">
+                      <canvas id="circle-<?php echo $row['name']; ?>"></canvas>
+                    </div>
+                  </div>
                 </div>
-                <div class="card-body">
-                  <h4 class="card-title">TMA</h4>
-                  <p class="card-category">
-                    <span class="text-success"> 30 mintutos </span> (média).</p>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">access_time</i> última atualização: 10:21h
+                <div class="col-md-8">
+                  <div class="card card-chart">
+                    <div class="body">
+                      <canvas id="line-<?php echo $row['name']; ?>"></canvas>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-8">
-              <div class="card card-chart">
-                <div class="card-header">
-                  <canvas id="line-tma"></canvas>
-                </div>
-                <div class="card-body">
-                  <h4 class="card-title">TMA</h4>
-                  <p class="card-category">
-                    <span class="text-success"> 30 mintutos </span> (média).</p>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">access_time</i> última atualização: 10:21h
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div><!--
-          <div class="row">
-            <div class="col-lg-12 col-md-12">
-              <div class="card">
-                <div class="card-header card-header-warning">
-                  <h4 class="card-title">Abandonos na URA</h4>
-                  <p>Última hora de atendimento</p>
-                </div>
-                <div class="card-body table-responsive">
-                  <table class="table table-hover">
-                    <thead class="text-warning">
-                      <th>Posicao</th>
-                      <th>Total abandono</th>
-                    </tr></thead>
-                    <tbody>
-                      <tr>
-                        <td>validação CPF</td>
-                        <td>30</td>
-                      </tr>
-                      <tr>
-                        <td>Seleção de produto</td>
-                        <td>20</td>
-                      </tr>
-                      <tr>
-                        <td>Aguardando atendente</td>
-                        <td>5</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>-->
+              <?php
+          } ?>
         </div>
       </div>
   </div>
@@ -1449,8 +1413,6 @@ body.swal2-no-backdrop .swal2-shown {
   <script src="index_files/core.js"></script>
   <!-- Library for adding dinamically elements -->
   <script src="index_files/arrive.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="index_files/js"></script>
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async="" defer="defer" src="index_files/buttons.js"></script>
   <!-- Chartist JS -->
@@ -1663,97 +1625,13 @@ body.swal2-no-backdrop .swal2-shown {
   <script src="index_files/jquery_003.js"></script>
   <script>
     $(document).ready(function() {
-
-      $('#facebook').sharrre({
-        share: {
-          facebook: true
-        },
-        enableHover: false,
-        enableTracking: false,
-        enableCounter: false,
-        click: function(api, options) {
-          api.simulateClick();
-          api.openPopup('facebook');
-        },
-        template: '<i class="fab fa-facebook-f"></i> Facebook',
-        url: 'https://demos.creative-tim.com/material-dashboard/examples/dashboard.html'
-      });
-
-      $('#google').sharrre({
-        share: {
-          googlePlus: true
-        },
-        enableCounter: false,
-        enableHover: false,
-        enableTracking: true,
-        click: function(api, options) {
-          api.simulateClick();
-          api.openPopup('googlePlus');
-        },
-        template: '<i class="fab fa-google-plus"></i> Google',
-        url: 'https://demos.creative-tim.com/material-dashboard/examples/dashboard.html'
-      });
-
-      $('#twitter').sharrre({
-        share: {
-          twitter: true
-        },
-        enableHover: false,
-        enableTracking: false,
-        enableCounter: false,
-        buttons: {
-          twitter: {
-            via: 'CreativeTim'
-          }
-        },
-        click: function(api, options) {
-          api.simulateClick();
-          api.openPopup('twitter');
-        },
-        template: '<i class="fab fa-twitter"></i> Twitter',
-        url: 'https://demos.creative-tim.com/material-dashboard/examples/dashboard.html'
-      });
-
-      // Facebook Pixel Code Don't Delete
-      ! function(f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function() {
-          n.callMethod ?
-            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = '2.0';
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s)
-      }(window,
-        document, 'script', '//connect.facebook.net/en_US/fbevents.js');
-
-      try {
-        fbq('init', '111649226022273');
-        fbq('track', "PageView");
-
-      } catch (err) {
-        console.log('Facebook Track Error:', err);
-      }
-
-    });
-  </script>
-  <noscript>
-    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=111649226022273&ev=PageView&noscript=1" />
-  </noscript>
-  <script>
-    $(document).ready(function() {
       // Javascript method's body can be found in assets/js/demos.js
       md.initDashboardPageCharts();
-
+<?php
+foreach ($metrics as $metric) {
+?>
 //doughnut
-var ctxD = document.getElementById("circle-tma").getContext('2d');
+var ctxD = document.getElementById("circle-<?php echo $metric['name']; ?>").getContext('2d');
 var myLineChart = new Chart(ctxD, {
 type: 'doughnut',
 data: {
@@ -1770,15 +1648,15 @@ responsive: true
 });
 
 //line
-$.get( "update.php?type=tma", function( data ) {
+$.get( "update.php?type=<?php echo $metric['name']; ?>&queue=<?php echo $_GET['queue']; ?>", function( data ) {
   console.log(data)
-  var ctxL = document.getElementById("line-tma").getContext('2d');
+  var ctxL = document.getElementById("line-<?php echo $metric['name']; ?>").getContext('2d');
   var myLineChart = new Chart(ctxL, {
     type: 'line',
     data: {
       labels: data.labels,
       datasets: [{
-        label: "TMA",
+        label: "<?php echo $metric['name']; ?>",
         data: data.data,
         backgroundColor: ['rgba(70, 191, 189,.21)'],
         borderColor: ['rgba(90, 211, 209, .7)'],
@@ -1790,7 +1668,8 @@ $.get( "update.php?type=tma", function( data ) {
       animation: false
     }
   });
-});
+});<?php
+}?>
 
     });
   </script>
