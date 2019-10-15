@@ -4,7 +4,7 @@ require_once 'bootstrap.php';
 /*
 $conteudo = file_get_contents('http://10.8.0.232:15000');
 
-return;
+return;*/
 
 $sth = $conn->prepare(
     <<<QUERY
@@ -20,7 +20,7 @@ SELECT config.queue,
  GROUP BY config.metric_id
 QUERY
     );
-$sth->execute([1]);*/
+$sth->execute([1]);
 
 
 $sth = $conn->prepare(
@@ -53,4 +53,4 @@ $sth->execute([2]);
 //     );
 // $sth->execute([3]);
 
-echo "done\n";
+echo date('Y-m-d H:i:s'). "\tdone\n";
