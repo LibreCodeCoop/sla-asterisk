@@ -1757,7 +1757,7 @@ Chart.plugins.register({
       var fontSize = (height / 10).toFixed(2);
       ctx.font = fontSize + "px Arial";
       ctx.textBaseline = "middle";
-      var text = chart.config.data.label,
+      var text = chart.config.data.datasets[0].data[0],
           textX = Math.round((width - ctx.measureText(text).width) / 2),
           textY = height / 2 + 15;
       ctx.fillText(text, textX, textY);
