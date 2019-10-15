@@ -1738,7 +1738,6 @@ foreach ($metrics as $metric) {
 Chart.plugins.register({
     beforeDraw: function(chart) {
         if(chart.config.type != 'doughnut') return;
-        console.log(chart)
         var data = chart.data.datasets[0].data;
         var sum = data.reduce(function(a, b) {
             return a + b;
