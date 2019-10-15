@@ -1399,6 +1399,23 @@ body.swal2-no-backdrop .swal2-shown {
         </div>
       </div>
   </div>
+      <!-- Modal -->
+      <div class="modal fade" id="modalEscolheFila" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Qual fila deseja monitorar?</h5>
+                  </div>
+                  <div class="modal-body">
+                      <select name="queueSelection" id="queueSelection" class="form-control">
+                      </select>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" id="buttonEscolheFila" >Monitorar</button>
+                  </div>
+              </div>
+          </div>
+      </div>
   <!--   Core JS Files   -->
   <script src="index_files/jquery.js"></script>
   <script src="index_files/popper.js"></script>
@@ -1449,6 +1466,30 @@ body.swal2-no-backdrop .swal2-shown {
   <script src="index_files/demo.js"></script>
   <script>
     $(document).ready(function() {
+
+        function queueSelection() {
+            var urlParams = new URLSearchParams(location.search);
+            if (urlParams.has('queue')) return;
+
+
+            $.get("queues.php", function (data) {
+                $.each(data, function (key, value) {
+                    $('#queueSelection').append('<option value=' + value.queue + '>' + value.queue + '</option>');
+                });
+            });
+            var modalEscolheFila = $('#modalEscolheFila').modal({
+                keyboard: false,
+                backdrop: false,
+            });
+
+            $('#buttonEscolheFila').on('click', function (event) {
+                //alert($('#queueSelection').val());
+                window.location.href = '?queue=' + $('#queueSelection').val();
+                modalEscolheFila.modal('hide');
+            })
+        }
+      queueSelection();
+
       $().ready(function() {
         $sidebar = $('.sidebar');
 
