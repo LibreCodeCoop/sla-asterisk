@@ -22,7 +22,7 @@ SELECT config.queue,
   FROM qstats.queue_stats_mv ST
   JOIN config ON config.metric_id = ?
    AND config.queue = ST.queue
- WHERE (event = 'COMPLETECALLER' OR event = 'COMPLETEAGENT')
+ WHERE event IN ('COMPLETECALLER', 'COMPLETEAGENT', 'ABANDON')
    AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60 second)
  GROUP BY config.metric_id
 QUERY
@@ -39,7 +39,7 @@ SELECT config.queue,
   FROM qstats.queue_stats_mv ST
   JOIN config ON config.metric_id = ?
    AND config.queue = ST.queue
- WHERE (event = 'COMPLETECALLER' OR event = 'COMPLETEAGENT')
+ WHERE event IN ('COMPLETECALLER', 'COMPLETEAGENT', 'ABANDON')
    AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60 second)
  GROUP BY config.metric_id
 QUERY
