@@ -1246,20 +1246,20 @@ body.swal2-no-backdrop .swal2-shown {
 
 <body class="">
   <!-- Extra details for Live View on GitHub Pages -->
-  <div class="wrapper "><?php /*?>
+  <div class="wrapper ">
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
         Tip 2: you can also add an image using data-image tag
-    -->
+    --><?php /*?>
       <div class="logo">
         <a href="http://www.creative-tim.com/" class="simple-text logo-normal">
           Kaf RIO
         </a>
-      </div>
+      </div><?php */?>
       <div class="sidebar-wrapper">
-        <ul class="nav">
+        <ul class="nav"><?php /*?>
           <li class="nav-item active  ">
             <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/dashboard.html">
               <i class="material-icons">dashboard</i>
@@ -1283,7 +1283,7 @@ body.swal2-no-backdrop .swal2-shown {
               <i class="material-icons">content_paste</i>
               <p>Indicadores por mês</p>
             </a>
-          </li>
+          </li><?php */?>
             <li class="nav-item ">
                 <a class="nav-link" href="#" id="modalShow">
                     <i class="material-icons">content_paste</i>
@@ -1294,21 +1294,6 @@ body.swal2-no-backdrop .swal2-shown {
       </div>
     <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-1.jpg) "></div></div>
     <div class="main-panel">
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-        <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">Dashboard</a>
-          </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="navbar-toggler-icon icon-bar"></span>
-            <span class="navbar-toggler-icon icon-bar"></span>
-            <span class="navbar-toggler-icon icon-bar"></span>
-          </button>
-        </div>
-      </nav>
-      <!-- End Navbar -->
       <div class="content">
         <div class="container-fluid"><?php
         require_once '../bootstrap.php';
