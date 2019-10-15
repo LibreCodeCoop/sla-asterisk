@@ -108,24 +108,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
   <link href="index_files/material-dashboard.css" rel="stylesheet">
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="index_files/demo.css" rel="stylesheet">
-  <!-- Google Tag Manager -->
-  <script>
-    (function(w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js'
-      });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src =
-        'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-NKDMSK6');
-  </script>
-  <!-- End Google Tag Manager -->
 <style>@-webkit-keyframes swal2-show {
   0% {
     -webkit-transform: scale(0.7);
@@ -1264,11 +1246,6 @@ body.swal2-no-backdrop .swal2-shown {
 
 <body class="">
   <!-- Extra details for Live View on GitHub Pages -->
-  <!-- Google Tag Manager (noscript) -->
-  <noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NKDMSK6" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-  </noscript>
-  <!-- End Google Tag Manager (noscript) -->
   <div class="wrapper "><?php /*?>
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
       <!--
@@ -1630,21 +1607,29 @@ QUERY
 <?php
 foreach ($metrics as $metric) {
 ?>
-//doughnut
-var ctxD = document.getElementById("circle-<?php echo $metric['name']; ?>").getContext('2d');
-var myLineChart = new Chart(ctxD, {
-type: 'doughnut',
-data: {
-labels: ["Atual", "Restante"],
-datasets: [{
-data: [200, 150],
-backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
-hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
-}]
-},
-options: {
-responsive: true
-}
+
+//register plugin
+Chart.plugins.register({
+    beforeDraw: function(chart) {
+        if(chart.config.type != 'doughnut') return;
+        console.log(chart)
+        var data = chart.data.datasets[0].data;
+        var sum = data.reduce(function(a, b) {
+            return a + b;
+        }, 0);
+        var width = chart.chart.width,
+            height = chart.chart.height,
+            ctx = chart.chart.ctx;
+        ctx.restore();
+        var fontSize = (height / 10).toFixed(2);
+        ctx.font = fontSize + "px Arial";
+        ctx.textBaseline = "middle";
+        var text = chart.config.data.label,
+            textX = Math.round((width - ctx.measureText(text).width) / 2),
+            textY = height / 2;
+        ctx.fillText(text, textX, textY);
+        ctx.save();
+    }
 });
 
 //line
@@ -1668,6 +1653,25 @@ $.get( "update.php?type=<?php echo $metric['name']; ?>&queue=<?php echo $_GET['q
       animation: false
     }
   });
+
+    //doughnut
+    var ctxD = document.getElementById("circle-<?php echo $metric['name']; ?>").getContext('2d');
+    var myLineChart = new Chart(ctxD, {
+    type: 'doughnut',
+    data: {
+        label: data.donnut.label,
+    labels: ["Atual", "Restante"],
+    datasets: [{
+    data: [data.donnut.setting, data.donnut.atual],
+    backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
+    hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
+    }]
+    },
+    options: {
+    responsive: true
+    }
+    });
+
 });<?php
 }?>
 
