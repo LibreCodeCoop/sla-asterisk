@@ -37,16 +37,37 @@ if ($_GET['type'] == 'tma') {
         ON metric.id = config.metric_id
        AND metric.name = ?
      WHERE (event = 'COMPLETECALLER' OR event = 'COMPLETEAGENT')
-       AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60*60*12*30 second)
+       AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60 second)
      GROUP BY config.metric_id
     QUERY
         );
     $sth->execute([$_GET['queue'], $_GET['type']]);
     
     $row = $sth->fetch(\PDO::FETCH_ASSOC);
-    $data['donnut']['label'] = $row['name'];
-    $data['donnut']['setting'] = $row['setting'];
-    $data['donnut']['atual'] = $row['atual'];
+    if ($row) {
+        $data['donnut']['label'] = $row['name'];
+        $data['donnut']['setting'] = $row['setting'];
+        $data['donnut']['atual'] = $row['atual'];
+    } else {
+        
+        $sth = $conn->prepare(
+            <<<QUERY
+    SELECT config.sla AS setting,
+           0 AS atual,
+           0 as name
+      FROM config
+      JOIN metric
+        ON metric.id = config.metric_id
+       AND config.queue = ?
+       AND metric.name = ?
+    QUERY
+            );
+        $sth->execute([$_GET['queue'], $_GET['type']]);
+        $row = $sth->fetch(\PDO::FETCH_ASSOC);
+        $data['donnut']['label'] = $row['name'];
+        $data['donnut']['setting'] = $row['setting'];
+        $data['donnut']['atual'] = $row['atual'];
+    }
 } elseif ($_GET['type'] == 'tme') {
     $sth = $conn->prepare(
         <<<QUERY
@@ -61,16 +82,38 @@ if ($_GET['type'] == 'tma') {
         ON metric.id = config.metric_id
        AND metric.name = ?
      WHERE (event = 'COMPLETECALLER' OR event = 'COMPLETEAGENT')
-       AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60*60*12*30 second)
+       AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60 second)
      GROUP BY config.metric_id
     QUERY
         );
     $sth->execute([$_GET['queue'], $_GET['type']]);
     
     $row = $sth->fetch(\PDO::FETCH_ASSOC);
-    $data['donnut']['label'] = $row['name'];
-    $data['donnut']['setting'] = $row['setting'];
-    $data['donnut']['atual'] = $row['atual'];
+    if ($row) {
+        $data['donnut']['label'] = $row['name'];
+        $data['donnut']['setting'] = $row['setting'];
+        $data['donnut']['atual'] = $row['atual'];
+        
+    } else {
+        
+        $sth = $conn->prepare(
+            <<<QUERY
+    SELECT config.sla AS setting,
+           0 AS atual,
+           0 as name
+      FROM config
+      JOIN metric
+        ON metric.id = config.metric_id
+       AND config.queue = ?
+       AND metric.name = ?
+    QUERY
+            );
+        $sth->execute([$_GET['queue'], $_GET['type']]);
+        $row = $sth->fetch(\PDO::FETCH_ASSOC);
+        $data['donnut']['label'] = $row['name'];
+        $data['donnut']['setting'] = $row['setting'];
+        $data['donnut']['atual'] = $row['atual'];
+    }
 }
 
 header('Content-Type: application/json');

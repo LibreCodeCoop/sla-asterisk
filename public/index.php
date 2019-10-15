@@ -1786,7 +1786,7 @@ $.get( "update.php?type=<?php echo $metric['name']; ?>&queue=<?php echo $_GET['q
             label: data.donnut.label,
             labels: ["Atual", "Restante"],
             datasets: [{
-                data: [data.donnut.setting, data.donnut.atual],
+                data: [data.donnut.atual, data.donnut.setting],
                 backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
                 hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
             }]
