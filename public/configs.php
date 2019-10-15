@@ -13,13 +13,14 @@ $request = json_decode($_POST['dados']);
   $sth = $conn->prepare('DELETE FROM `config` WHERE 1=1');
   $sth->execute();
 
-  $sth = $conn->prepare('INSERT INTO `config` (`queue`, `sla`, `window`, `metric_id`) VALUES(:queue, :sla, :window, :metric_id)');
+  $sth = $conn->prepare('INSERT INTO `config` (`queue`, `sla`, `window`, refresh, `metric_id`) VALUES(:queue, :sla, :window, :refresh, :metric_id)');
 
   for($i = 0; $i <= count($request); $i++) {
     $sth->execute([
       ':queue' => $request[$i]->name,
       ':sla' => (int)$request[$i]->sla,
       ':window' => (int)$request[$i]->window,
+      ':refresh' => (int)$request[$i]->refresh,
       ':metric_id' => (int)$request[$i]->metric,
     ]);
   }
@@ -30,7 +31,7 @@ $request = json_decode($_POST['dados']);
 } else {
   $sth = $conn->prepare(
     <<<QUERY
-SELECT id, queue, sla, window, metric_id
+SELECT id, queue, sla, window, refresh, metric_id
 FROM config
 QUERY
   );

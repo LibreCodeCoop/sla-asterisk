@@ -10,6 +10,7 @@ class Config extends AbstractMigration
             ->addColumn('queue', 'string', ['limit' => 100])
             ->addColumn('sla', 'integer')
             ->addColumn('window', 'integer')
+            ->addColumn('refresh', 'integer')
             ->addColumn('metric_id', 'integer')
             ->addForeignKey('metric_id', 'metric', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE'])
             ->save();

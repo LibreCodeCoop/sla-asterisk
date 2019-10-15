@@ -18,18 +18,21 @@ class Config extends AbstractSeed
         $this->table('config')
             ->insert([
                 'window' => 60,
+                'refresh' => 10,
                 'sla' => 60,
                 'queue' => 610,
                 'metric_id' => 1
             ])
             ->insert([
                 'window' => 60,
+                'refresh' => 10,
                 'sla' => 60,
                 'queue' => 610,
                 'metric_id' => 2
             ])
             ->insert([
                 'window' => 60,
+                'refresh' => 10,
                 'sla' => 60,
                 'queue' => 610,
                 'metric_id' => 3

@@ -1362,6 +1362,7 @@ QUERY
                               <th fulltable-field-name="name">Nome</th>
                               <th fulltable-field-name="sla">SLA</th>
                               <th fulltable-field-name="window">Window</th>
+                              <th fulltable-field-name="refresh">Refresh</th>
                               <th fulltable-field-name="metric">Métrica</th>
                           </tr>
                           </thead>
@@ -1505,6 +1506,14 @@ QUERY
                             "mandatory":"campo obrigatório",
                         }
                     },
+                    "refresh":{
+                        "type":"integer",
+                        "mandatory":true,
+                        "errors":{
+                            "type":"Deve ser um número",
+                            "mandatory":"campo obrigatório",
+                        }
+                    },
                 },
             });
 
@@ -1537,6 +1546,7 @@ QUERY
                       '<td><span>' +  data[i].queue + '</span></td>' +
                       '<td><span>' +  data[i].sla + '</span></td>' +
                       '<td><span>' +  data[i].window + '</span></td>' +
+                      '<td><span>' +  data[i].refresh + '</span></td>' +
                       '<td><span>' +  data[i].metric_id + '</span></td>' +
                       '</tr>');
               }
@@ -1731,75 +1741,82 @@ QUERY
       // Javascript method's body can be found in assets/js/demos.js
       md.initDashboardPageCharts();
 <?php
-foreach ($metrics as $metric) {
-?>
-
+if ($metrics) {?>
 //register plugin
 Chart.plugins.register({
-    beforeDraw: function(chart) {
-        if(chart.config.type != 'doughnut') return;
-        var data = chart.data.datasets[0].data;
-        var sum = data.reduce(function(a, b) {
-            return a + b;
-        }, 0);
-        var width = chart.chart.width,
-            height = chart.chart.height,
-            ctx = chart.chart.ctx;
-        ctx.restore();
-        var fontSize = (height / 10).toFixed(2);
-        ctx.font = fontSize + "px Arial";
-        ctx.textBaseline = "middle";
-        var text = chart.config.data.label,
-            textX = Math.round((width - ctx.measureText(text).width) / 2),
-            textY = height / 2 + 15;
-        ctx.fillText(text, textX, textY);
-        ctx.save();
-    }
+  beforeDraw: function(chart) {
+      if(chart.config.type != 'doughnut') return;
+      var data = chart.data.datasets[0].data;
+      var sum = data.reduce(function(a, b) {
+          return a + b;
+      }, 0);
+      var width = chart.chart.width,
+          height = chart.chart.height,
+          ctx = chart.chart.ctx;
+      ctx.restore();
+      var fontSize = (height / 10).toFixed(2);
+      ctx.font = fontSize + "px Arial";
+      ctx.textBaseline = "middle";
+      var text = chart.config.data.label,
+          textX = Math.round((width - ctx.measureText(text).width) / 2),
+          textY = height / 2 + 15;
+      ctx.fillText(text, textX, textY);
+      ctx.save();
+  }
 });
-
 //line
-$.get( "update.php?type=<?php echo $metric['name']; ?>&queue=<?php echo $_GET['queue']; ?>", function( data ) {
-  var ctxL = document.getElementById("line-<?php echo $metric['name']; ?>").getContext('2d');
-  var myLineChart = new Chart(ctxL, {
-    type: 'line',
-    data: {
-      labels: data.labels,
-      datasets: [{
-        label: "<?php echo $metric['name']; ?>",
-        data: data.data,
-        backgroundColor: ['rgba(70, 191, 189,.21)'],
-        borderColor: ['rgba(90, 211, 209, .7)'],
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      animation: false
-    }
-  });
-
-    //doughnut
-    var ctxD = document.getElementById("circle-<?php echo $metric['name']; ?>").getContext('2d');
-    var myLineChart = new Chart(ctxD, {
-        type: 'doughnut',
-        data: {
-            label: data.donnut.label,
-            labels: ["Atual", "Restante"],
-            datasets: [{
-                data: [data.donnut.atual, data.donnut.setting],
-                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
-                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-});<?php
+atualizaGraficos = function() {
+    <?php
+    foreach ($metrics as $metric) {
+        ?>
+        $.get( "update.php?type=<?php echo $metric['name']; ?>&queue=<?php echo $_GET['queue']; ?>", function( data ) {
+              var ctxL = document.getElementById("line-<?php echo $metric['name']; ?>").getContext('2d');
+              var chart1 = new Chart(ctxL, {
+                type: 'line',
+                data: {
+                  labels: data.labels,
+                  datasets: [{
+                    label: "<?php echo $metric['name']; ?>",
+                    data: data.data,
+                    backgroundColor: ['rgba(70, 191, 189,.21)'],
+                    borderColor: ['rgba(90, 211, 209, .7)'],
+                    borderWidth: 2
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  animation: false
+                }
+              });
+            //doughnut
+            if (data.donnut) {
+            var ctxD = document.getElementById("circle-<?php echo $metric['name']; ?>").getContext('2d');
+            var chart2 = new Chart(ctxD, {
+                type: 'doughnut',
+                data: {
+                    label: data.donnut.label,
+                    labels: ["Atual", "Restante"],
+                    datasets: [{
+                        data: [data.donnut.atual, data.donnut.setting],
+                        backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
+                        hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    animation: false
+                }
+            });
+            }
+        });
+    <?php
+    }?>
+    setTimeout(atualizaGraficos, 5000);
+}
+atualizaGraficos();
+<?php
 }?>
-
-    });
+});
   </script>
 
 
