@@ -1284,9 +1284,15 @@ body.swal2-no-backdrop .swal2-shown {
               <p>Indicadores por mês</p>
             </a>
           </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="#" id="modalShow">
+                    <i class="material-icons">content_paste</i>
+                    <p>Configuraçãoes</p>
+                </a>
+            </li>
         </ul>
       </div>
-    <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-1.jpg) "></div></div><?php */?>
+    <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-1.jpg) "></div></div>
     <div class="main-panel">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
@@ -1357,6 +1363,35 @@ QUERY
               </div>
           </div>
       </div>
+
+      <div class="modal fade" id="modalCRUDConfig" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content modal-xl">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Qual fila deseja monitorar?</h5>
+                  </div>
+                  <div class="modal-body">
+                      <table class="fulltable fulltable-editable" id="test-table">
+                          <thead>
+                          <tr>
+                              <th fulltable-field-name="name">Nome</th>
+                              <th fulltable-field-name="sla">SLA</th>
+                              <th fulltable-field-name="window">Window</th>
+                              <th fulltable-field-name="metric">Métrica</th>
+                          </tr>
+                          </thead>
+                          <tbody id="tBodyConfig">
+                          </tbody>
+                      </table>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                      <button type="button" class="btn btn-primary" id="buttonCRUDConfig" >Salvar</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
   <!--   Core JS Files   -->
   <script src="index_files/jquery.js"></script>
   <script src="index_files/popper.js"></script>
@@ -1399,6 +1434,12 @@ QUERY
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="index_files/material-dashboard.js" type="text/javascript"></script>
 
+
+  <!-- FullTable -->
+  <script src="index_files/fulltable/jquery.fulltable.js"></script>
+  <link rel="stylesheet" type="text/css" href="index_files/fulltable/jquery.fulltable.css"/>
+
+
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
@@ -1428,6 +1469,106 @@ QUERY
             })
         }
       queueSelection();
+
+        $('#modalShow').on('click', function  modalShow(){
+
+            configTable();
+            $('#modalCRUDConfig').modal();
+            return false;
+        });
+
+
+        $('#modalCRUDConfig').on('hide.bs.modal', function () {
+            document.location.reload(true);
+
+        })
+
+        var metrics = [];
+        function configTable(){
+            $("#test-table").FullTable({
+                "alwaysCreating":true,
+                "fields": {
+                    "metric":{
+                        "options": metrics,
+                        "mandatory":true,
+                        "placeholder":"Escolha",
+                        "errors":{
+                            "mandatory":"Métrica é obrigatória"
+                        }
+                    },
+                    "name":{
+                        "type":"integer",
+                        "mandatory":true,
+                        "errors":{
+                            "type":"Deve ser um número",
+                            "mandatory":"campo obrigatório",
+                        }
+                    },
+                    "sla":{
+                        "type":"integer",
+                        "mandatory":true,
+                        "errors":{
+                            "type":"Deve ser um número",
+                            "mandatory":"campo obrigatório",
+                        }
+                    },
+                    "window":{
+                        "type":"integer",
+                        "mandatory":true,
+                        "errors":{
+                            "type":"Deve ser um número",
+                            "mandatory":"campo obrigatório",
+                        }
+                    },
+                },
+            });
+
+            $("#buttonCRUDConfig").on("click", function(event) {
+                console.log($("#test-table").FullTable("getData"));
+                data = $("#test-table").FullTable("getData");
+                $.ajax({
+                    url: 'configs.php',
+                    type: 'POST',
+                    data:  { dados: JSON.stringify (data)} ,
+                }).done(function () {
+                    document.location.reload(true);
+                });
+
+            });
+
+            $("#test-table").FullTable("draw");
+        }
+        function modalCRUDConfig() {
+
+          $.ajax({
+              url : 'configs.php',
+              async: false,
+          }).done(function( data ) {
+
+              for(var i = 0; i < data.length; i++){
+
+                  $('#tBodyConfig').append(
+                      '<tr>' +
+                      '<td><span>' +  data[i].queue + '</span></td>' +
+                      '<td><span>' +  data[i].sla + '</span></td>' +
+                      '<td><span>' +  data[i].window + '</span></td>' +
+                      '<td><span>' +  data[i].metric_id + '</span></td>' +
+                      '</tr>');
+              }
+          });
+
+          $.ajax({
+              url : 'metrics.php',
+              async: false,
+          }).done(function( data ) {
+              metrics = data.map( function (metric) {
+                  return {title: metric.name, value: metric.id}
+              });
+
+          });
+      }
+
+        modalCRUDConfig();
 
       $().ready(function() {
         $sidebar = $('.sidebar');

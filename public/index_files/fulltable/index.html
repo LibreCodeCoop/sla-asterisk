@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery FullTable Plugin Demonstration</title>
+	<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="jquery.fulltable.js"></script>
+	<link rel="stylesheet" href="jquery.fulltable.css"/>
+
+	<style type="text/css">
+    body { background-color:#fafafa; font-family:'Roboto';}
+    .container { margin:150px auto;}
+		table {
+			position:relative;
+			width:525px;
+			margin:4px 0;
+			border-collapse: collapse;
+
+			font-family: tahoma, arial, helvetica !important;
+			font-size: 9pt !important;
+		}
+		table, table th, table td {
+			border: 1px solid black;
+		}
+		table th, table td  {
+			padding:0 2em;
+			white-space:nowrap;
+			text-overflow:ellipsis;
+			overflow:hidden;
+			line-height:22px;
+			height:22px;
+		}
+		a.button {
+			position: relative;
+			display: inline-block;
+
+			font-family: tahoma, arial, helvetica;
+			font-size: 9pt;
+			font-weight: bold;
+
+			color: #ffffff;
+			background-color: #AAAAAA;
+
+			padding: 5px;
+
+			text-decoration: none;
+
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			border-radius: 5px;
+		}
+	</style>
+
+	<script type="text/javascript">
+		$(
+			function() {
+				$("#test-table").FullTable({
+					"alwaysCreating":true,
+					"selectable":true,
+					"fields": {
+						"gender":{
+							"options":[
+								{
+									"title":"Male",
+									"value":"xy"
+								},
+								{
+									"title":"Female",
+									"value":"xx"
+								}
+							],
+							"mandatory":true,
+							"placeholder":"Select one",
+							"errors":{
+								"mandatory":"Gender name is mandatory"
+							}
+						},
+						"firstname":{
+							"mandatory":true,
+							"errors":{
+								"mandatory":"First name is mandatory"
+							}
+						},
+						"lastname":{
+							"mandatory":true,
+							"errors":{
+								"mandatory":"Last name is mandatory"
+							}
+						},
+						"age":{
+							"type":"integer",
+							"mandatory":false,
+							"validator":function(age) {
+								if (age >= 0) {
+									return true;
+								} else {
+									return false;
+								}
+							},
+							"errors":{
+								"type":"Age must be an integer number",
+								"mandatory":"Age is mandatory",
+								"validator":"Age cannot be negative"
+							}
+						},
+						"height":{
+							"type":"decimal",
+							"mandatory":false,
+							"validator":function(height) {
+								if ((height > 0.3) && (height <= 2.8)) {
+									return true;
+								} else {
+									return false;
+								}
+							},
+							"errors":{
+								"type":"Height must be a number",
+								"mandatory":"Height is mandatory",
+								"validator":"Height cannot be neither biggest than 2.8 nor lowest than 0.3"
+							}
+						},
+						"description":{
+							"mandatory":false
+						}
+					}
+				});
+				$("#test-table-add-row").click(function() {
+					$("#test-table").FullTable("addRow");
+				});
+				$("#test-table-get-value").click(function() {
+					console.log($("#test-table").FullTable("getData"));
+				});
+				$("#test-table").FullTable("on", "error", function(errors) {
+					for (var error in errors) {
+						error = errors[error];
+						console.log(error);
+					}
+				});
+				$("#test-table").FullTable("draw");
+			}
+		);
+	</script>
+</head>
+<body>
+<div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="//www.jqueryscript.net/table/Inline-Editor-For-HTML-Tables-jQuery-fullTable/">Download This Plugin</a></li>
+<li><a href="//www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+	<div class="container">
+    <h1>jQuery FullTable Plugin Demonstration</h1>
+	<table class="fulltable fulltable-editable" id="test-table">
+		<thead>
+			<tr>
+				<th fulltable-field-name="firstname">First name</th>
+				<th fulltable-field-name="lastname">Last name</th>
+				<th fulltable-field-name="gender">Gender</th>
+				<th fulltable-field-name="age">Age</th>
+				<th fulltable-field-name="height">Height</th>
+				<th fulltable-field-name="description">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr><td><span>John</span></td><td><span>Smith</span></td><td><span>xy</span></td><td><span>23</span></td><td><span>1.72</span></td><td><span>Famous explorer</span></td></tr>
+			<tr><td><span>Peter</span></td><td><span>Pan</span></td><td><span>xy</span></td><td><span>10</span></td><td><span>1.60</span></td><td><span>Flyer boy who does not grow</span></td></tr>
+			<tr><td><span>Mary</span></td><td><span>Stevenson</span></td><td><span>xx</span></td><td><span>35</span></td><td><span>1.69</span></td><td><span>Unknown woman</span></td></tr>
+		</tbody>
+	</table>
+	<a href="#" class="button btn btn-danger" id="test-table-get-value">> Get value</a>
+    </div>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+@font-face {
+    font-family: 'jquery.fulltable';
+    src: url('jquery.fulltable.eot');
+    src: url('jquery.fulltable.eot?#iefix') format('embedded-opentype'),
+         url('jquery.fulltable.woff2') format('woff2'),
+         url('jquery.fulltable.woff') format('woff'),
+         url('jquery.fulltable.ttf') format('truetype'),
+         url('jquery.fulltable.svg#jquery.fulltable') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+table.fulltable thead th {
+	vertical-align: top;
+}
+table.fulltable span.fulltable-filter {
+	position:relative;
+	display:block;
+}
+table.fulltable input, table.fulltable select {
+	position:relative;
+	
+	width:100%!important;
+	
+	font-family: tahoma, arial, helvetica;
+	font-size: 9pt;
+
+	clear: both;
+    float: left;
+    margin: 0.5em 0!important;
+}
+table.fulltable input.checkbox {
+	width: 13px!important;
+	height: 13px!important;
+}
+table.fulltable th.fulltable-selection-control {
+	width: 30px;
+}
+/*table.fulltable tr.fulltable-editing td.fulltable-selection-control input.checkbox {
+	display:none;
+}*/
+table.fulltable th.fulltable-selection-control, table.fulltable td.fulltable-selection-control {
+    padding: 0 1em;
+	width: 30px;
+}
+table.fulltable.fulltable-editable th.fulltable-edition-control {
+	width: 70px;
+}
+table.fulltable.fulltable-editable th.fulltable-edition-control, table.fulltable.fulltable-editable td.fulltable-edition-control {
+    padding: 0 1em;
+}
+table.fulltable.fulltable-editable input.invalid, table.fulltable.fulltable-editable select.invalid {
+	border: solid 1px #FF3333;
+	background-color:#FFEEEE;
+}
+table.fulltable thead th a.fulltable-sort {
+	font-family: 'jquery.fulltable';
+    font-size: 9px;
+    position: relative;
+    left: 6px;
+    top: 0px;
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    cursor: pointer;
+}
+table.fulltable thead th.fulltable-asc a.fulltable-sort-desc {
+	display:none!important;
+}
+table.fulltable thead th.fulltable-desc a.fulltable-sort-asc {
+	display:none!important;
+}
+table.fulltable.fulltable-editable td.fulltable-edition-control {
+	white-space:nowrap;
+}
+table.fulltable.fulltable-editable td.fulltable-edition-control a {
+	font-family:'jquery.fulltable';
+	font-size:16px;
+	position:relative;
+	display: inline-block;
+	width:16px;
+	height:16px;
+	top:1px;
+	line-height:16px;
+	margin:0.5em;
+	cursor:pointer;
+    text-align:center;
+}
+table.fulltable.fulltable-editable td.fulltable-edition-control a.fulltable-create {
+	display:none;
+}
+table.fulltable.fulltable-editable tr.fulltable-creating td.fulltable-edition-control a.fulltable-create {
+	display:inline-block!important;
+}
+table.fulltable.fulltable-editable tr.fulltable-creating td.fulltable-edition-control a.fulltable-save {
+	display:none!important;
+}
+table.fulltable.fulltable-editable tr.fulltable-editing td.fulltable-edition-control a.fulltable-edit, table.fulltable.fulltable-editable tr.fulltable-editing td.fulltable-edition-control a.fulltable-remove {
+	display:none;
+}
+table.fulltable.fulltable-editable tr td.fulltable-edition-control a.fulltable-save, table.fulltable.fulltable-editable tr td.fulltable-edition-control a.fulltable-discard {
+	display:none;
+}
+table.fulltable.fulltable-editable tr.fulltable-editing td.fulltable-edition-control a.fulltable-save, table.fulltable.fulltable-editable tr.fulltable-editing td.fulltable-edition-control a.fulltable-discard {
+	display:inline-block;
+}
