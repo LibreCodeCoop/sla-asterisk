@@ -114,6 +114,38 @@ if ($_GET['type'] == 'tma') {
         $data['donnut']['setting'] = $row['setting'];
         $data['donnut']['atual'] = $row['atual'];
     }
+} elseif ($_GET['type'] == 'Fila') {
+    $sth = $conn->prepare(
+        <<<QUERY
+    SELECT config.sla AS setting,
+           0 AS atual,
+           0 as name
+      FROM config
+      JOIN metric
+        ON metric.id = config.metric_id
+       AND config.queue = ?
+       AND metric.name = ?
+    QUERY
+        );
+    $sth->execute([$_GET['queue'], $_GET['type']]);
+    
+    $row = $sth->fetch(\PDO::FETCH_ASSOC);
+    
+    $content = shell_exec('curl http://10.8.0.232:15000');
+    preg_match_all('/(?P<queue>\d+) has (?P<calls>\d+) calls/', $content, $matches);
+    foreach ($matches['queue'] as $key => $queue) {
+        if ($queue == $_GET['queue']) {
+            
+            $data['donnut']['label'] = $row['name'];
+            $data['donnut']['setting'] = $row['setting'];
+            $data['donnut']['atual'] = $matches['calls'][$key];
+        }
+    }
+    if (!$data['donnut']) {
+        $data['donnut']['label'] = $row['name'];
+        $data['donnut']['setting'] = $row['setting'];
+        $data['donnut']['atual'] = $row['atual'];
+    }
 }
 
 header('Content-Type: application/json');

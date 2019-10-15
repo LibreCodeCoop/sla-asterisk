@@ -14,6 +14,7 @@ class Metric extends AbstractMigration
             ->insert(['name' => 'tma'])
             ->insert(['name' => 'tme'])
             ->insert(['name' => 'tmo'])
+            ->insert(['name' => 'Fila'])
             ->saveData();
     }
 

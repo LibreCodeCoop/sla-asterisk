@@ -1,10 +1,17 @@
 <?php
 require_once 'bootstrap.php';
 
-/*
-$conteudo = file_get_contents('http://10.8.0.232:15000');
-
-return;*/
+$content = shell_exec('curl http://10.8.0.232:15000');
+preg_match_all('/(?P<queue>\d+) has (?P<calls>\d+) calls/', $content, $matches);
+foreach ($matches['queue'] as $key => $queue) {
+    
+    $sth = $conn->prepare(
+        <<<QUERY
+INSERT INTO history (queue, sla, metric_id) VALUES (?, ?, ?)
+QUERY
+        );
+    $sth->execute([$queue, $matches['calls'][$key], 4]);
+}
 
 $sth = $conn->prepare(
     <<<QUERY
@@ -38,19 +45,5 @@ SELECT config.queue,
 QUERY
     );
 $sth->execute([2]);
-
-
-// $sth = $conn->prepare(
-//     <<<QUERY
-// SELECT `datetime`, agent, event
-//   FROM qstats.queue_stats_mv ST
-//   JOIN config ON config.metric_id = 3    
-//    AND config.queue = ST.queue
-//  WHERE event IN ('PAUSE', 'UNPAUSE')
-//    AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60 second)
-//  ORDER BY ST.agent, ST.`datetime`
-// QUERY
-//     );
-// $sth->execute([3]);
 
 echo date('Y-m-d H:i:s'). "\tdone\n";
