@@ -16,32 +16,33 @@ QUERY
 $sth = $conn->prepare(
     <<<QUERY
 INSERT INTO history (queue, sla, metric_id)
-SELECT config.queue,
+SELECT ST.queue,
        SUM(info2)/count(*) AS sla,
        config.metric_id AS metric_id
   FROM qstats.queue_stats_mv ST
-  JOIN config ON config.metric_id = ?
-   AND config.queue = ST.queue
- WHERE event IN ('COMPLETECALLER', 'COMPLETEAGENT', 'ABANDON')
-   AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60 second)
- GROUP BY config.metric_id
+  JOIN config
+    ON config.queue = ST.queue
+   AND config.metric_id = ?
+ WHERE event IN ('COMPLETECALLER', 'COMPLETEAGENT')
+   AND ST.datetime >= DATE_SUB(NOW(), INTERVAL config.window second)
+ GROUP BY ST.queue
 QUERY
     );
 $sth->execute([1]);
 
-
 $sth = $conn->prepare(
     <<<QUERY
 INSERT INTO history (queue, sla, metric_id)
-SELECT config.queue,
+SELECT ST.queue,
        SUM(info1)/count(*) AS sla,
        config.metric_id AS metric_id
   FROM qstats.queue_stats_mv ST
-  JOIN config ON config.metric_id = ?
-   AND config.queue = ST.queue
+  JOIN config
+    ON config.queue = ST.queue
+   AND config.metric_id = ?
  WHERE event IN ('COMPLETECALLER', 'COMPLETEAGENT', 'ABANDON')
-   AND ST.datetime >= DATE_SUB(NOW(), INTERVAL 60 second)
- GROUP BY config.metric_id
+   AND ST.datetime >= DATE_SUB(NOW(), INTERVAL config.window second)
+ GROUP BY ST.queue
 QUERY
     );
 $sth->execute([2]);
