@@ -672,7 +672,8 @@ foreach ($metrics as $metric) {
             },
             options: {
               responsive: true,
-              animation: false
+              animation: false,
+              legend: {display: false},
             }
           });
         //doughnut
