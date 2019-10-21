@@ -26,17 +26,17 @@ while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {
 
 $sth = $conn->prepare(
 <<<QUERY
-SELECT config.sla AS setting,
-       history.sla AS atual,
-       ROUND(history.sla) AS name
-  FROM history
-  JOIN config
-    ON config.queue = history.queue
-   AND config.metric_id = history.metric_id
-   AND config.queue = ?
+SELECT c.sla AS setting,
+       COALESCE(history.sla, 0) AS atual,
+       COALESCE(ROUND(history.sla), 0) AS name
+  FROM config c
   JOIN metric
-    ON metric.id = config.metric_id
+    ON metric.id = c.metric_id
+   AND c.queue = ?
    AND metric.name = ?
+  LEFT JOIN history
+    ON c.queue = history.queue
+   AND c.metric_id = history.metric_id
  ORDER BY created DESC
  LIMIT 1
 QUERY
