@@ -15,6 +15,7 @@ SELECT TIME_FORMAT(created, "%H:%i") AS date,
  WHERE config.queue = ?
    AND history.created >= DATE_SUB(NOW(), INTERVAL config.window second)
    AND metric.name = ?
+ ORDER BY metric.order, created
 QUERY
 );
 $sth->execute([$_GET['queue'], $_GET['type']]);

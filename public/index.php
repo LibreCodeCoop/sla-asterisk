@@ -185,6 +185,7 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                                 FROM config
                                 JOIN metric ON metric.id = config.metric_id
                                 WHERE queue = ?
+                                ORDER BY metric.order
                                 QUERY
                               );
         $sth->execute([$_GET['queue']]);?>    
