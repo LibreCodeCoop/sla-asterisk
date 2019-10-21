@@ -127,21 +127,18 @@ foreach ($matches['queue'] as $key => $queue) {
 $sth = $conn->prepare(
     <<<QUERY
     INSERT INTO history (queue, sla, metric_id)
-    SELECT COALESCE(c.queue, c2.queue) AS queue,
+    SELECT c.queue,
            COALESCE(SUM(info2)/count(*), 0) AS sla,
-           COALESCE(c.metric_id, c2.metric_id) AS metric_id
-      FROM config c2
-      LEFT JOIN config c
-        ON c.id = c2.id
-       AND c.metric_id = 1
-      JOIN qstats.queue_stats_mv ST
+           c.metric_id
+      FROM config c
+      LEFT JOIN qstats.queue_stats_mv ST
         ON c.queue = ST.queue
-     WHERE c2.metric_id = 1
-       AND (
-            event IN ('COMPLETECALLER', 'COMPLETEAGENT')
-            AND ST.datetime >= DATE_SUB(NOW(), INTERVAL c.window second)
-           ) OR c2.id IS NOT NULL
-     GROUP BY c.queue, c2.queue
+       AND c.metric_id = 1
+       AND ST.event IN ('COMPLETECALLER', 'COMPLETEAGENT')
+       AND ST.datetime >= DATE_SUB(NOW(), INTERVAL c.window second)
+     WHERE c.metric_id = 1
+       AND c.id IS NOT NULL
+     GROUP BY c.queue
     QUERY
 );
 $sth->execute();
@@ -150,21 +147,18 @@ $sth->execute();
 $sth = $conn->prepare(
     <<<QUERY
     INSERT INTO history (queue, sla, metric_id)
-    SELECT COALESCE(c.queue, c2.queue) AS queue,
+    SELECT c.queue,
            COALESCE(SUM(info1)/count(*), 0) AS sla,
-           COALESCE(c.metric_id, c2.metric_id) AS metric_id
-      FROM config c2
-      LEFT JOIN config c
-        ON c.id = c2.id
-       AND c.metric_id = 2
-      JOIN qstats.queue_stats_mv ST
+           c.metric_id
+      FROM config c
+      LEFT JOIN qstats.queue_stats_mv ST
         ON c.queue = ST.queue
-     WHERE c2.metric_id = 2
-       AND (
-            event IN ('COMPLETECALLER', 'COMPLETEAGENT')
-            AND ST.datetime >= DATE_SUB(NOW(), INTERVAL c.window second)
-           ) OR c2.id IS NOT NULL
-     GROUP BY c.queue, c2.queue
+       AND c.metric_id = 2
+       AND ST.event IN ('COMPLETECALLER', 'COMPLETEAGENT')
+       AND ST.datetime >= DATE_SUB(NOW(), INTERVAL c.window second)
+     WHERE c.metric_id = 2
+       AND c.id IS NOT NULL
+     GROUP BY c.queue
     QUERY
 );
 $sth->execute();
