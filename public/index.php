@@ -197,14 +197,14 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
             <div class="card col-md-6">   
               <h5 class="card-title"><b><?php echo strtoupper($row['name']); ?></b></h5>
               <div class="row">       
-                <div class="col-sm">
-                  <div class="card">
+                <div class="col-sm-4">
+                  <div class="card" style="height: 96%">
                     <!-- <div class="card-body"> -->
-                      <canvas id="circle-<?php echo $row['name']; ?>"></canvas>
+                      <canvas id="circle-<?php echo $row['name']; ?>" style="height: 100%"></canvas>
                     <!-- </div> -->
                   </div>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-8">
                   <div class="card">
                     <!-- <div class="body"> -->
                       <canvas id="line-<?php echo $row['name']; ?>"></canvas>
