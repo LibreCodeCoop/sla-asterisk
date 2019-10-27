@@ -13,7 +13,7 @@ SELECT TIME_FORMAT(created, "%H:%i") AS date,
   JOIN metric
     ON metric.id = history.metric_id
  WHERE config.queue = ?
-   AND history.created >= DATE_SUB(NOW(), INTERVAL config.window second)
+   AND history.created >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
    AND metric.name = ?
  ORDER BY metric.order, created
 QUERY
