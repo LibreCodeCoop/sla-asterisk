@@ -440,47 +440,7 @@ if (typeof Array.isArray != "function") {
 							});
 							$(th).append(sortElement);
 						}
-					}			
-					// Insertion of filtering fields.
-					// $(th).children("span.fulltable-filter, input.fulltable-filter, select.fulltable-filter").remove();
-					// if (options.filterable) {
-					// 	var fieldData = options.fields[fieldName];
-					// 	if (fieldData == null) fieldData = {};
-					// 	if (fieldData.filterable == null || fieldData.filterable == true) {
-					// 		var filterFieldElement;
-					// 		// TODO: Here must be validation of input type: select, checkbox, if (fieldData.options == "boolean")
-					// 		if (fieldData.options != null) {
-					// 			filterFieldElement = $("<select>", {
-					// 				'class':"fulltable-filter"
-					// 			});
-					// 			var optionDom = $("<option>", {
-					// 				'text':"", // TODO: Implement a placeholder for combo filter.
-					// 				'value':null
-					// 			});
-					// 			$(filterFieldElement).append($(optionDom));
-					// 			// TODO: Here must be validation of input type: select, checkbox, if (fieldData.options == "boolean")
-					// 			for (var option in fieldData.options) {
-					// 				if (!fieldData.options.hasOwnProperty(option)) continue;
-					// 				option = fieldData.options[option];
-					// 				optionDom = $("<option>", {
-					// 					'text':option.title,
-					// 					'value':option.value
-					// 				});
-					// 				$(filterFieldElement).append($(optionDom));
-					// 			}
-					// 		} else {
-					// 			filterFieldElement = $("<input/>", {
-					// 				'class':"fulltable-filter",
-					// 				'type':"text"
-					// 			});
-					// 		}
-					// 		var filterSpanWrapper = $("<span>", {
-					// 			'class':"fulltable-filter"
-					// 		});
-					// 		$(th).append(filterSpanWrapper);
-					// 		$(filterSpanWrapper).append(filterFieldElement);
-					// 	}
-					// }
+					}
 				}).removeClass("fulltable-asc").removeClass("fulltable-desc").addClass("fulltable-asc");
 				
 				$(table).find("input, select").change(function(event) {
