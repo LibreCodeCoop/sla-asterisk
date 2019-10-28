@@ -4,44 +4,52 @@ require_once '../bootstrap.php';
 
 if(isset($_POST['dados']) && !empty($_POST['dados'])){
 
-$request = json_decode($_POST['dados']);
+  $request = json_decode($_POST['dados'],true);
+
+  $conn->beginTransaction(); 
+
+  $ids = array_column($request, 'id');
+  $ids_list = implode(',', $ids);
 
 
-  $conn->beginTransaction();
-  //var_dump($request);die;
+  $delete = $conn->prepare("DELETE FROM config WHERE id NOT IN (" . $ids_list .")");
+  $delete->execute();
 
-  $sth = $conn->prepare('DELETE FROM `config` WHERE 1=1');
-  $sth->execute();
+  foreach ($request as $key => $value) {
+    
+    if ($value['id'] <> false) {
+        
+      $query = $conn->prepare("UPDATE config 
+                              SET queue = '". $value['name'] ."', 
+                              sla = ".$value['sla'].", 
+                              window = ".$value['window'].", 
+                              refresh = ".$value['refresh'].", 
+                              metric_id = ".$value['metric']." 
+                              WHERE id = " . $value['id']);
+    }else{
+        
+      $query = $conn->prepare("INSERT INTO config (queue, sla, window, refresh, metric_id) VALUES ('". $value['name'] ."', ".$value['sla'].", ".$value['window'].", ".$value['refresh'].", ".$value['metric'] .")");
+      
+    }
 
-  $sth = $conn->prepare('INSERT INTO `config` (`queue`, `sla`, `window`, refresh, `metric_id`) VALUES(:queue, :sla, :window, :refresh, :metric_id)');
-
-  for($i = 0; $i <= count($request); $i++) {
-    $sth->execute([
-      ':queue' => $request[$i]->name,
-      ':sla' => (int)$request[$i]->sla,
-      ':window' => (int)$request[$i]->window,
-      ':refresh' => (int)$request[$i]->refresh,
-      ':metric_id' => (int)$request[$i]->metric,
-    ]);
+    $query->execute();
+    $conn->commit();
   }
-
-  $conn->commit();
- $data = json_encode(['affected' => $sth->rowCount() ]);
-
-} else {
-  $sth = $conn->prepare(
-    <<<QUERY
-SELECT id, queue, sla, window, refresh, metric_id
-FROM config
-QUERY
-  );
-  $sth->execute();
-  while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {
-    $data[] = $row;
-
-  }
-
-  $sth->execute();
+  
+//   return;
+}else{
+    
+    $sth = $conn->prepare(
+        <<<QUERY
+      SELECT id, queue, sla, window, refresh, metric_id
+      FROM config
+      QUERY
+        );
+    $sth->execute();
+    $data = $sth->fetchAll(\PDO::FETCH_ASSOC);
+    
+    header('Content-Type: application/json');
+    echo json_encode($data);
 }
-header('Content-Type: application/json');
-echo json_encode($data);
+
+

@@ -18,7 +18,9 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
 <html data-cbscriptallow="true" class="perfect-scrollbar-off" lang="en">
-<script async="" src="index_files/fbevents.js"></script><script async="" src="index_files/gtm.js"></script><script>(function () {
+<script async="" src="index_files/fbevents.js"></script>
+<script async="" src="index_files/gtm.js"></script>
+<script>(function () {
   const toBlob = HTMLCanvasElement.prototype.toBlob;
   const toDataURL = HTMLCanvasElement.prototype.toDataURL;
   const getImageData = CanvasRenderingContext2D.prototype.getImageData;
@@ -123,56 +125,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
     <div class="col-md-12">  
       <button type="submit" class="btn btn-primary pull-right" id="modalShow">Configurações</button>  
     </div>    
-    <?php /*?>
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
-      <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
-        Tip 2: you can also add an image using data-image tag
-      -->      
-      <div class="logo">
-        <a href="http://www.creative-tim.com/" class="simple-text logo-normal">
-          Kaf RIO
-        </a>
-      </div>      
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-          <li class="nav-item active  ">
-            <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/dashboard.html">
-              <i class="material-icons">dashboard</i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/user.html">
-              <i class="material-icons">person</i>
-              <p>Perfil de usuário</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/tables.html">
-              <i class="material-icons">notifications</i>
-              <p>Relatório de pausa</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/typography.html">
-              <i class="material-icons">content_paste</i>
-              <p>Indicadores por mês</p>
-            </a>
-          </li><?php 
-            <li class="nav-item ">
-                <a class="nav-link" href="#" id="modalShow">
-                    <i class="material-icons">content_paste</i>
-                    <p>Configuraçãoes</p>
-                </a>
-            </li>
-        </ul>        
-      </div>
-      
-      <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-1.jpg) "></div>
-    </div>
-    <?php*/?>
 
     <div class="main-panel full-width">
       <div class="content">
@@ -242,19 +194,19 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                     <h5 class="modal-title" id="exampleModalLabel">Qual fila deseja monitorar?</h5>
                 </div>
                 <div class="modal-body">
-                    <table class="fulltable fulltable-editable" id="test-table">
-                        <thead>
-                        <tr>
-                            <th fulltable-field-name="name">Nome</th>
-                            <th fulltable-field-name="sla">SLA</th>
-                            <th fulltable-field-name="window">Window</th>
-                            <th fulltable-field-name="refresh">Refresh</th>
-                            <th fulltable-field-name="metric">Métrica</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tBodyConfig">
-                        </tbody>
-                    </table>
+                  <table class="fulltable fulltable-editable" id="test-table">
+                    <thead>
+                      <tr>
+                          <th fulltable-field-name="name">Nome</th>
+                          <th fulltable-field-name="sla">SLA</th>
+                          <th fulltable-field-name="window">Window</th>
+                          <th fulltable-field-name="refresh">Refresh</th>
+                          <th fulltable-field-name="metric">Métrica</th>
+                          <th fulltable-field-name="id" style="display: none">ID</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tBodyConfig"></tbody>
+                  </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -319,104 +271,103 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
   <script>
     $(document).ready(function() {
 
-        function queueSelection() {
-            var urlParams = new URLSearchParams(location.search);
-            if (urlParams.has('queue')) return;
+      function queueSelection() {
+          var urlParams = new URLSearchParams(location.search);
+          if (urlParams.has('queue')) return;
 
 
-            $.get("queues.php", function (data) {
-                $.each(data, function (key, value) {
-                    $('#queueSelection').append('<option value=' + value.queue + '>' + value.queue + '</option>');
-                });
-            });
-            var modalEscolheFila = $('#modalEscolheFila').modal({
-                keyboard: false,
-                backdrop: false,
-            });
+          $.get("queues.php", function (data) {
+              $.each(data, function (key, value) {
+                  $('#queueSelection').append('<option value=' + value.queue + '>' + value.queue + '</option>');
+              });
+          });
+          var modalEscolheFila = $('#modalEscolheFila').modal({
+              keyboard: false,
+              backdrop: false,
+          });
 
-            $('#buttonEscolheFila').on('click', function (event) {
-                //alert($('#queueSelection').val());
-                window.location.href = '?queue=' + $('#queueSelection').val();
-                modalEscolheFila.modal('hide');
-            })
-        }
+          $('#buttonEscolheFila').on('click', function (event) {
+              //alert($('#queueSelection').val());
+              window.location.href = '?queue=' + $('#queueSelection').val();
+              modalEscolheFila.modal('hide');
+          })
+      }
       queueSelection();
 
-        $('#modalShow').on('click', function  modalShow(){
+      $('#modalShow').on('click', function  modalShow(){
 
-            configTable();
-            $('#modalCRUDConfig').modal();
-            return false;
-        });
+          configTable();
+          $('#modalCRUDConfig').modal();
+          return false;
+      });
 
+      $('#modalCRUDConfig').on('hide.bs.modal', function () {
+          document.location.reload(true);
 
-        $('#modalCRUDConfig').on('hide.bs.modal', function () {
-            document.location.reload(true);
+      })
 
-        })
+      var metrics = [];
+      function configTable(){
+          $("#test-table").FullTable({
+              "alwaysCreating":true,
+              "fields": {
+                  "metric":{
+                      "options": metrics,
+                      "mandatory":true,
+                      "placeholder":"Escolha",
+                      "errors":{
+                          "mandatory":"Métrica é obrigatória"
+                      }
+                  },
+                  "name":{
+                      "type":"string",
+                      "mandatory":true,
+                      "errors":{
+                          "type":"Deve ser um número",
+                          "mandatory":"campo obrigatório",
+                      }
+                  },
+                  "sla":{
+                      "type":"integer",
+                      "mandatory":true,
+                      "errors":{
+                          "type":"Deve ser um número",
+                          "mandatory":"campo obrigatório",
+                      }
+                  },
+                  "window":{
+                      "type":"integer",
+                      "mandatory":true,
+                      "errors":{
+                          "type":"Deve ser um número",
+                          "mandatory":"campo obrigatório",
+                      }
+                  },
+                  "refresh":{
+                      "type":"integer",
+                      "mandatory":true,
+                      "errors":{
+                          "type":"Deve ser um número",
+                          "mandatory":"campo obrigatório",
+                      }
+                  },
+              },
+          });
 
-        var metrics = [];
-        function configTable(){
-            $("#test-table").FullTable({
-                "alwaysCreating":true,
-                "fields": {
-                    "metric":{
-                        "options": metrics,
-                        "mandatory":true,
-                        "placeholder":"Escolha",
-                        "errors":{
-                            "mandatory":"Métrica é obrigatória"
-                        }
-                    },
-                    "name":{
-                        "type":"integer",
-                        "mandatory":true,
-                        "errors":{
-                            "type":"Deve ser um número",
-                            "mandatory":"campo obrigatório",
-                        }
-                    },
-                    "sla":{
-                        "type":"integer",
-                        "mandatory":true,
-                        "errors":{
-                            "type":"Deve ser um número",
-                            "mandatory":"campo obrigatório",
-                        }
-                    },
-                    "window":{
-                        "type":"integer",
-                        "mandatory":true,
-                        "errors":{
-                            "type":"Deve ser um número",
-                            "mandatory":"campo obrigatório",
-                        }
-                    },
-                    "refresh":{
-                        "type":"integer",
-                        "mandatory":true,
-                        "errors":{
-                            "type":"Deve ser um número",
-                            "mandatory":"campo obrigatório",
-                        }
-                    },
-                },
-            });
-
-            $("#buttonCRUDConfig").on("click", function(event) {
-                console.log($("#test-table").FullTable("getData"));
-                data = $("#test-table").FullTable("getData");
-                $.ajax({
-                    url: 'configs.php',
-                    type: 'POST',
-                    data:  { dados: JSON.stringify (data)} ,
+          $("#buttonCRUDConfig").on("click", function(event) {
+              console.log($("#test-table").FullTable("getData"));
+              data = $("#test-table").FullTable("getData");
+              $.ajax({
+                  url: 'configs.php',
+                  type: 'POST',
+                  data:  { dados: JSON.stringify (data)} ,
                 }).done(function () {
-                    document.location.reload(true);
-                });
+                  document.location.reload(true);
+              });
 
-            });
+          });
 
-            $("#test-table").FullTable("draw");
+          $("#test-table").FullTable("draw");
         }
         function modalCRUDConfig() {
 
@@ -425,17 +376,18 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
               async: false,
           }).done(function( data ) {
 
-              for(var i = 0; i < data.length; i++){
+            for(var i = 0; i < data.length; i++){
 
-                  $('#tBodyConfig').append(
-                      '<tr>' +
-                      '<td><span>' +  data[i].queue + '</span></td>' +
-                      '<td><span>' +  data[i].sla + '</span></td>' +
-                      '<td><span>' +  data[i].window + '</span></td>' +
-                      '<td><span>' +  data[i].refresh + '</span></td>' +
-                      '<td><span>' +  data[i].metric_id + '</span></td>' +
-                      '</tr>');
-              }
+                $('#tBodyConfig').append(
+                    '<tr>' +
+                    '<td><span>' +  data[i].queue + '</span></td>' +
+                    '<td><span>' +  data[i].sla + '</span></td>' +
+                    '<td><span>' +  data[i].window + '</span></td>' +
+                    '<td><span>' +  data[i].refresh + '</span></td>' +
+                    '<td><span>' +  data[i].metric_id + '</span></td>' +
+                    '<td style="display:none"><span>' +  data[i].id + '</span></td>' +
+                    '</tr>');
+            }
           });
 
           $.ajax({
@@ -449,7 +401,7 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
           });
       }
 
-        modalCRUDConfig();
+      modalCRUDConfig();
 
       $().ready(function() {
         $sidebar = $('.sidebar');
@@ -468,7 +420,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
           if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
             $('.fixed-plugin .dropdown').addClass('open');
           }
-
         }
 
         $('.fixed-plugin a').click(function(event) {
@@ -522,99 +473,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
 
 
           var new_image = $(this).find("img").attr('src');
-
-          if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-            $sidebar_img_container.fadeOut('fast', function() {
-              $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-              $sidebar_img_container.fadeIn('fast');
-            });
-          }
-
-          if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-            var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-
-            $full_page_background.fadeOut('fast', function() {
-              $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-              $full_page_background.fadeIn('fast');
-            });
-          }
-
-          if ($('.switch-sidebar-image input:checked').length == 0) {
-            var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
-            var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-
-            $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-            $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-          }
-
-          if ($sidebar_responsive.length != 0) {
-            $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
-          }
-        });
-
-        $('.switch-sidebar-image input').change(function() {
-          $full_page_background = $('.full-page-background');
-
-          $input = $(this);
-
-          if ($input.is(':checked')) {
-            if ($sidebar_img_container.length != 0) {
-              $sidebar_img_container.fadeIn('fast');
-              $sidebar.attr('data-image', '#');
-            }
-
-            if ($full_page_background.length != 0) {
-              $full_page_background.fadeIn('fast');
-              $full_page.attr('data-image', '#');
-            }
-
-            background_image = true;
-          } else {
-            if ($sidebar_img_container.length != 0) {
-              $sidebar.removeAttr('data-image');
-              $sidebar_img_container.fadeOut('fast');
-            }
-
-            if ($full_page_background.length != 0) {
-              $full_page.removeAttr('data-image', '#');
-              $full_page_background.fadeOut('fast');
-            }
-
-            background_image = false;
-          }
-        });
-
-        $('.switch-sidebar-mini input').change(function() {
-          $body = $('body');
-
-          $input = $(this);
-
-          if (md.misc.sidebar_mini_active == true) {
-            $('body').removeClass('sidebar-mini');
-            md.misc.sidebar_mini_active = false;
-
-            $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
-
-          } else {
-
-            $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
-
-            setTimeout(function() {
-              $('body').addClass('sidebar-mini');
-
-              md.misc.sidebar_mini_active = true;
-            }, 300);
-          }
-
-          // we simulate the window Resize so the charts will get updated in realtime.
-          var simulateWindowResize = setInterval(function() {
-            window.dispatchEvent(new Event('resize'));
-          }, 180);
-
-          // we stop the simulation of Window Resize after the animations are completed
-          setTimeout(function() {
-            clearInterval(simulateWindowResize);
-          }, 1000);
 
         });
       });
