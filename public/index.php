@@ -121,9 +121,14 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
 <body class="">
   <!-- Extra details for Live View on GitHub Pages -->
   <div class="wrapper">
-    <div class="col-md-12">  
-      <button type="submit" class="btn btn-primary pull-right" id="modalShow">Configurações</button>  
-    </div>    
+    <div class="row">  
+    	<div class="col-md-10">  
+      		<button type="submit" class="btn btn-primary pull-right" id="modalShow">Configurações</button>
+      	</div>
+      	<div class="col-md-2">
+      		<a href="/relatorio.php" class="btn btn-primary pull-right">Gerar relatório</a>
+      	</div>    
+    </div>
 
     <div class="main-panel full-width">
       <div class="content">
