@@ -9,15 +9,17 @@ if(isset($_POST['dados']) && !empty($_POST['dados'])){
   $conn->beginTransaction(); 
 
   $ids = array_column($request, 'id');
-  $ids_list = implode(',', $ids);
+  $array_filter = array_filter($ids);
+  $ids_list = implode(',', $array_filter);
 
 
   $delete = $conn->prepare("DELETE FROM config WHERE id NOT IN (" . $ids_list .")");
+
   $delete->execute();
 
   foreach ($request as $key => $value) {
-    
-    if ($value['id'] <> false) {
+      
+    if ($value['id'] <> null) {
         
       $query = $conn->prepare("UPDATE config 
                               SET queue = '". $value['name'] ."', 
@@ -31,12 +33,11 @@ if(isset($_POST['dados']) && !empty($_POST['dados'])){
       $query = $conn->prepare("INSERT INTO config (queue, sla, window, refresh, metric_id) VALUES ('". $value['name'] ."', ".$value['sla'].", ".$value['window'].", ".$value['refresh'].", ".$value['metric'] .")");
       
     }
-
-    $query->execute();
-    $conn->commit();
+    $query->execute();    
   }
+  $conn->commit();
   
-//   return;
+   return;
 }else{
     
     $sth = $conn->prepare(
