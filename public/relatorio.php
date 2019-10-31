@@ -21,9 +21,9 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://demos.creative-tim.com/material-dashboard/assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="https://demos.creative-tim.com/material-dashboard/assets/img/favicon.png">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <link rel="apple-touch-icon" sizes="76x76" href="https://demos.creative-tim.com/material-dashboard/assets/img/apple-icon.png">
+      <link rel="icon" type="image/png" href="https://demos.creative-tim.com/material-dashboard/assets/img/favicon.png">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Material Dashboard by Creative Tim https://demos.creative-tim.com/material-dashboard/examples/dashboard.html</title>
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport">
   <!-- Extra details for Live View on GitHub Pages -->
@@ -75,34 +75,75 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
       <div class="content">
         <?php
         require_once '../bootstrap.php';
-        
-        $sth = $conn->prepare('SELECT id, queue, sla, metric_id, created FROM dashboard.history LIMIT 10;');
-//         var_dump($sth);
-        $sth->execute([$_GET['queue']]);?>    
+        ?>
 
         <div class="row">              
-          	
-           	<table class="fulltable fulltable-editable" id="test-table">
+          	<form action="/relatorio_download.php" method="post">
+           	<table class="table table-bordered" id="tabela_relatorio">
                 <thead>
                   	<tr>
-                      <th fulltable-field-name="queue">QUEUE</th>
-                      <th fulltable-field-name="sla">SLA</th>
-                      <th fulltable-field-name="metrica">MÉTRICA</th>
-                      <th fulltable-field-name="data_criacao">DATA CRIAÇÃO</th>
+                      <th>
+                            <?php 
+                            $sth = $conn->prepare('SELECT DISTINCT queue FROM dashboard.history order by queue;');
+                            $sth->execute();
+                            $array = $sth->fetchAll(\PDO::FETCH_COLUMN);    
+                            $values = implode(",", $array);
+                            $sth->execute();
+                            ?>
+                            <select name="queue">
+                            	<option value="<?php echo $values;?>">ESCOLHA A QUEUE</option>
+                            	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
+                      				<option value="<?php echo $row['queue'];?>"><?php echo $row['queue'];?></option>                   
+                  				<?php } ?>
+                  			</select>                    
+                      </th>                      
+                      <th>
+                            <?php 
+                            $sth = $conn->prepare('SELECT DISTINCT metric_id FROM dashboard.history order by metric_id;');
+                            $sth->execute();    
+                            $array = $sth->fetchAll(\PDO::FETCH_COLUMN);
+                            $values = implode(",", $array);
+                            $sth->execute();
+                            ?>
+                            <select name="metric_id">
+                            	<option value="<?php echo $values;?>">ESCOLHA A MÉTRICA</option>
+                            	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
+                      				<option value="<?php echo $row['metric_id'];?>"><?php echo $row['metric_id'];?></option>                   
+                  				<?php } ?>
+                  			</select>                    
+                      </th>                      
+                      <th>
+                            <?php 
+                            $sth = $conn->prepare('SELECT DISTINCT DATE_FORMAT(created, "%d/%M/%Y %H") AS created_formated, DATE_FORMAT(created, "%Y-%m-%d") AS created FROM dashboard.history order by created;');
+                            $sth->execute();                            
+                            ?>
+                            <select name="data_inicio">
+                            	<option value="">ESCOLHA A DATA INÍCIO</option>
+                            	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
+                      				<option value="<?php echo $row['created'].":00:00";?>"><?php echo $row['created_formated'];?></option>                   
+                  				<?php } ?>
+                  			</select>                    
+                      </th>  
+                      <th>
+                            <?php 
+                            $sth = $conn->prepare('SELECT DISTINCT DATE_FORMAT(created, "%d/%M/%Y %H") AS created_formated, DATE_FORMAT(created, "%Y-%m-%d") AS created FROM dashboard.history order by created;');
+                            $sth->execute();
+                            ?>
+                            <select name="data_fim">
+                            <option value="">ESCOLHA A DATA FIM</option>
+                            	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
+                      				<option value="<?php echo $row['created'].":00:00";?>"><?php echo $row['created_formated'];?></option>                   
+                  				<?php } ?>
+                  			</select>                    
+                      </th>                        
                   	</tr>
                 </thead>
-            	<tbody id="tBodyConfig">
-                <?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
-                      <tr>
-                      	<td><?php echo $row['queue'];?></td>
-                      	<td><?php echo $row['sla'];?></td>
-                      	<td><?php echo $row['metric_id'];?></td>
-                      	<td><?php echo $row['created'];?></td>
-                      </tr>                    
-                  <?php } ?>
-            	</tbody>
-            </table>          	
+            </table>    
+            <input type="submit" name="gerar" value="Gerar Relatório"/>
+            </form>      	
         </div>
+        
+        
       </div>
     </div>
  
@@ -110,58 +151,5 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
 
   <!--   Core JS Files   -->
   <script src="index_files/jquery.js"></script>
-  <script src="index_files/popper.js"></script>
-  <script src="index_files/bootstrap-material-design.js"></script>
-  <script src="index_files/perfect-scrollbar.js"></script>
-  <!-- Plugin for the momentJs  -->
-  <script src="index_files/moment.js"></script>
-  <!--  Plugin for Sweet Alert -->
-  <script src="index_files/sweetalert2.js"></script>
-  <!-- Forms Validations Plugin -->
-  <script src="index_files/jquery_005.js"></script>
-  <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-  <script src="index_files/jquery_002.js"></script>
-  <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-  <script src="index_files/bootstrap-selectpicker.js"></script>
-  <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-  <script src="index_files/bootstrap-datetimepicker.js"></script>
-  <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-  <script src="index_files/jquery_004.js"></script>
-  <!--	Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-  <script src="index_files/bootstrap-tagsinput.js"></script>
-  <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-  <script src="index_files/jasny-bootstrap.js"></script>
-  <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-  <script src="index_files/fullcalendar.js"></script>
-  <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-  <script src="index_files/jquery-jvectormap.js"></script>
-  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-  <script src="index_files/nouislider.js"></script>
-  <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-  <script src="index_files/core.js"></script>
-  <!-- Library for adding dinamically elements -->
-  <script src="index_files/arrive.js"></script>
-  <!-- Place this tag in your head or just before your close body tag. -->
-  <script async="" defer="defer" src="index_files/buttons.js"></script>
-  <!-- Chartist JS -->
-  <script src="index_files/chartist.js"></script>
-  <!--  Notifications Plugin    -->
-  <script src="index_files/bootstrap-notify.js"></script>
-  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="index_files/material-dashboard.js" type="text/javascript"></script>
-
-
-  <!-- FullTable -->
-  <script src="index_files/fulltable/jquery.fulltable.js"></script>
-  <link rel="stylesheet" type="text/css" href="index_files/fulltable/jquery.fulltable.css"/>
-
-
-  <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
-  <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-  <script src="index_files/demo.js"></script>
- 
- 
-
 
 </body></html>
