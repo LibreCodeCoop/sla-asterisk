@@ -173,12 +173,29 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
       <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-1.jpg) "></div>
     </div>
     <?php*/?>
+    <?php
+    require_once '../bootstrap.php';
+    if(isset($_GET['queue'])) {
+        $sth = $conn->prepare(
+            <<<QUERY
+             SELECT descr
+               FROM asterisk.queues_config
+              WHERE extension = ?
+            QUERY
+            );
+        $sth->execute([$_GET['queue']]);
+        $row = $sth->fetch(\PDO::FETCH_ASSOC);
+        if($row) {
+            ?>
+            <div class="text-center">
+             <h1><?php echo $row['descr']; ?></h1>
+            </div><?php
+        }
+    }?>
 
     <div class="main-panel full-width">
       <div class="content">
         <?php
-        require_once '../bootstrap.php';
-        
         $sth = $conn->prepare(
                                 <<<QUERY
                                 SELECT metric.name, config.refresh
