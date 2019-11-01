@@ -691,7 +691,8 @@ foreach ($metrics as $metric) {
                 data: data.data,
                 backgroundColor: ['rgba(70, 191, 189,.21)'],
                 borderColor: ['rgba(90, 211, 209, .7)'],
-                borderWidth: 2
+                borderWidth: 2,
+                pointRadius:0
               }]
             },
             options: {
