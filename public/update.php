@@ -73,7 +73,7 @@ while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {
 
 $sth = $conn->prepare(
 <<<QUERY
-SELECT c.sla AS setting,
+SELECT c.sla - COALESCE(history.sla, 0) AS setting,
        COALESCE(history.sla, 0) AS atual,
        COALESCE(ROUND(history.sla), 0) AS name
   FROM config c
