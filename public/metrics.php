@@ -6,6 +6,7 @@ $sth = $conn->prepare(
   <<<QUERY
 SELECT id, name
 FROM metric
+ORDER BY name
 QUERY
 );
 $sth->execute();
