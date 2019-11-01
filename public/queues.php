@@ -8,6 +8,7 @@ SELECT CASE WHEN descr IS NOT NULL THEN concat(queue, ' - ', descr) ELSE queue E
        queue
 FROM config
 LEFT JOIN asterisk.queues_config aqc ON aqc.extension = config.queue
+WHERE queue > 0
 GROUP BY queue
 QUERY
 );

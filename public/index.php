@@ -112,9 +112,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="index_files/demo.css" rel="stylesheet">
   <link href="index_files/custom.css" rel="stylesheet">
-  <script type="text/javascript" charset="UTF-8" src="index_files/common.js"></script>
-  <script type="text/javascript" charset="UTF-8" src="index_files/util.js"></script>
-  <script type="text/javascript" charset="UTF-8" src="index_files/AuthenticationService.Authenticate"></script>
 </head>
 
 <body class="">
@@ -197,14 +194,14 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
       <div class="content">
         <?php
         $sth = $conn->prepare(
-                                <<<QUERY
-                                SELECT metric.name, config.refresh
-                                FROM config
-                                JOIN metric ON metric.id = config.metric_id
-                                WHERE queue = ?
-                                ORDER BY metric.order
-                                QUERY
-                              );
+            <<<QUERY
+            SELECT metric.name, config.refresh
+            FROM config
+            JOIN metric ON metric.id = config.metric_id
+            WHERE queue = ?
+            ORDER BY metric.order
+            QUERY
+        );
         $sth->execute([$_GET['queue']]);?>    
 
         <div class="row">  
@@ -232,6 +229,18 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
             </div> 
           <?php
           } ?>
+            <div class="card col-md-6">   
+              <h5 class="card-title"><b>URA</b></h5>
+              <div class="row">       
+                <div class="col-sm-12">
+                  <div class="card">
+                    <!-- <div class="body"> -->
+                      <canvas id="ura"></canvas>
+                    <!-- </div> -->
+                  </div>
+                </div> 
+              </div> 
+            </div> 
         </div>
       </div>
     </div>
@@ -344,7 +353,7 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
 
             $.get("queues.php", function (data) {
                 $.each(data, function (key, value) {
-                    $('#queueSelection').append('<option value=' + value.queue + '>' + value.queue + '</option>');
+                    $('#queueSelection').append('<option value=' + value.queue + '>' + value.nome + '</option>');
                 });
             });
             var modalEscolheFila = $('#modalEscolheFila').modal({
@@ -353,7 +362,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
             });
 
             $('#buttonEscolheFila').on('click', function (event) {
-                //alert($('#queueSelection').val());
                 window.location.href = '?queue=' + $('#queueSelection').val();
                 modalEscolheFila.modal('hide');
             })
@@ -422,7 +430,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
             });
 
             $("#buttonCRUDConfig").on("click", function(event) {
-                console.log($("#test-table").FullTable("getData"));
                 data = $("#test-table").FullTable("getData");
                 $.ajax({
                     url: 'configs.php',
@@ -690,7 +697,7 @@ foreach ($metrics as $metric) {
             options: {
               responsive: true,
               animation: false,
-              legend: {display: false},
+              legend: {display: false}
             }
           });
         //doughnut
@@ -700,6 +707,7 @@ foreach ($metrics as $metric) {
             type: 'doughnut',
             data: {
                 label: data.donnut.label,
+                pointRadius: 0,
                 labels: ["Atual", "Restante"],
                 datasets: [{
                     data: [data.donnut.atual, data.donnut.setting],
@@ -721,6 +729,33 @@ foreach ($metrics as $metric) {
 }?>
 <?php
 }?>
+
+
+atualizaUra = function() {
+    $.get( "update.php?type=ura", function( data ) {
+        var ctxB = document.getElementById("ura").getContext('2d');
+        var myBarChart = new Chart(ctxB, {
+            type: 'bar',
+            data: data,
+            options: {
+                animation: false,
+                legend: {display: false},
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        setTimeout(atualizaUra, 10000);
+    });
+}
+atualizaUra();
+
+
+
 });
   </script>
 
