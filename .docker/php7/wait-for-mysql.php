@@ -5,6 +5,7 @@ function dbIsUp() {
         $dsn = 'mysql:dbname='.getenv('DB_DATABASE').';host='.getenv('DB_HOST');
         new PDO($dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
     } catch(Exception $e) {
+	echo $e->message();
         return false;
     }
     return true;

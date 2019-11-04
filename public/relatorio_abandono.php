@@ -70,83 +70,60 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
 <body class="">
   <!-- Extra details for Live View on GitHub Pages -->
   <div class="wrapper">
-
     <div class="main-panel full-width">
       <div class="content">
         <?php
         require_once '../bootstrap.php';
         ?>
-
         <div class="row">              
-          	<form action="/relatorio_download.php" method="post" name="relatorio_historico">
+          	<form action="/relatorio_download.php" method="post" name="relatorio_abandono">
            	<table class="table table-bordered" id="tabela_relatorio">
                 <thead>
                   	<tr>
                       <th>
                             <?php 
-                            $sth = $conn->prepare('SELECT DISTINCT queue, descr FROM dashboard.history JOIN asterisk.queues_config ON queue = extension order by queue;');
-                            $sth->execute();
-                            $array = $sth->fetchAll(\PDO::FETCH_ASSOC);
-                            $queues = array_column($array, 'queue');
-                            $values = implode(",", $queues);
+                            $sth = $conn->prepare("SELECT DISTINCT queue FROM qstats.queue_stats_mv WHERE queue <> 'NONE'");
                             $sth->execute();
                             ?>
-                            <select name="queue">
-                            	<option value="<?php echo $values;?>">ESCOLHA A QUEUE</option>
+                            <select name="queue" required>
+                            	<option value="">ESCOLHA A QUEUE</option>
                             	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
-                      				<option value="<?php echo $row['queue'];?>"><?php echo $row['queue'].' - '.$row['descr'];?></option>
+                      				<option value="<?php echo $row['queue'];?>"><?php echo $row['queue'];?></option>                   
                   				<?php } ?>
                   			</select>                    
                       </th>                      
                       <th>
                             <?php 
-                            $sth = $conn->prepare('SELECT metric_id, metric.name FROM history JOIN metric ON metric.id = history.metric_id GROUP BY metric_id, metric.name order by metric_id;');
+                            $sth = $conn->prepare('SELECT DISTINCT DATE_FORMAT(datetimeconnect, "%d/%M/%Y %H:%m:%s") AS datetimeconnect_formated, datetimeconnect FROM qstats.queue_stats_mv;');
                             $sth->execute();    
-                            $array = $sth->fetchAll(\PDO::FETCH_ASSOC);
-                            $values = implode(",", array_column($array, 'metric_id'));
-                            $sth->execute();
                             ?>
-                            <select name="metric_id">
-                            	<option value="<?php echo $values;?>">ESCOLHA A MÉTRICA</option>
-                            	<?php foreach ($array as $row) {?>
-                      				<option value="<?php echo $row['metric_id'];?>"><?php echo $row['name'];?></option>                   
+                            <select name="datetimeconnect" required>
+                            	<option value="">ESCOLHA A DATA DE INÍCIO</option>
+                            	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
+                      				<option value="<?php echo $row['datetimeconnect'];?>"><?php echo $row['datetimeconnect_formated'];?></option>                   
                   				<?php } ?>
                   			</select>                    
                       </th>                      
                       <th>
                             <?php 
-                            $sth = $conn->prepare('SELECT DISTINCT DATE_FORMAT(created, "%d/%M/%Y %H") AS created_formated, DATE_FORMAT(created, "%Y-%m-%d") AS created FROM dashboard.history order by created;');
+                            $sth = $conn->prepare('SELECT DISTINCT DATE_FORMAT(datetimeend, "%d/%M/%Y %H:%m:%s") AS datetimeend_formated, datetimeend FROM qstats.queue_stats_mv;');
                             $sth->execute();                            
                             ?>
-                            <select name="data_inicio" required>
-                            	<option value="">ESCOLHA A DATA INÍCIO</option>
+                            <select name="datetimeend" required>
+                            	<option value="">ESCOLHA A DATA DE FIM</option>
                             	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
-                      				<option value="<?php echo $row['created'].":00:00";?>"><?php echo $row['created_formated'];?></option>                   
+                      				<option value="<?php echo $row['datetimeend'];?>"><?php echo $row['datetimeend_formated'];?></option>                   
                   				<?php } ?>
                   			</select>                    
-                      </th>  
+                      </th>           
                       <th>
-                            <?php 
-                            $sth = $conn->prepare('SELECT DISTINCT DATE_FORMAT(created, "%d/%M/%Y %H") AS created_formated, DATE_FORMAT(created, "%Y-%m-%d") AS created FROM dashboard.history order by created;');
-                            $sth->execute();
-                            ?>
-                            <select name="data_fim" required>
-                            <option value="">ESCOLHA A DATA FIM</option>
-                            	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
-                      				<option value="<?php echo $row['created'].":00:00";?>"><?php echo $row['created_formated'];?></option>                   
-                  				<?php } ?>
-                  			</select>                    
+                      	<input type="submit" name="relatorio_abandono" value="Gerar Relatório"/>
                       </th>
-                      <th>
-                      	<input type="submit" name="relatorio_historico" value="Gerar Relatório"/>
-                      </th>                        
                   	</tr>
                 </thead>
-            </table>                
+            </table>    
             </form>      	
-        </div>
-        
-        
+        </div>                
       </div>
     </div>
  

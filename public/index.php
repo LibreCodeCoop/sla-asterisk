@@ -119,30 +119,44 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
 </head>
 
 <body class="">
+
   <!-- Extra details for Live View on GitHub Pages -->
   <div class="wrapper">
-    <div class="row">  
-    	<div class="col-md-10">  
-      		<button type="submit" class="btn btn-primary pull-right" id="modalShow">Configurações</button>
-      	</div>
-      	<div class="col-md-2">
-      		<a href="/relatorio.php" class="btn btn-primary pull-right">Gerar relatório</a>
-      	</div>    
+    <div class="col-md-12">  
+      <button type="submit" class="btn btn-primary pull-right" id="modalShow">Configurações</button>  
     </div>
+    <?php
+    require_once '../bootstrap.php';
+    if(isset($_GET['queue'])) {
+        $sth = $conn->prepare(
+            <<<QUERY
+             SELECT descr
+               FROM asterisk.queues_config
+              WHERE extension = ?
+            QUERY
+            );
+        $sth->execute([$_GET['queue']]);
+        $row = $sth->fetch(\PDO::FETCH_ASSOC);
+        if($row) {
+            ?>
+            <div class="text-center">
+             <h1><?php echo $row['descr']; ?></h1>
+            </div><?php
+        }
+    }?>
 
     <div class="main-panel full-width">
       <div class="content">
         <?php
-        require_once '../bootstrap.php';
-        
         $sth = $conn->prepare(
-                                <<<QUERY
-                                SELECT metric.name, config.refresh
-                                FROM config
-                                JOIN metric ON metric.id = config.metric_id
-                                WHERE queue = ?
-                                QUERY
-                              );
+            <<<QUERY
+            SELECT metric.name, config.refresh
+            FROM config
+            JOIN metric ON metric.id = config.metric_id
+            WHERE queue = ?
+            ORDER BY metric.order
+            QUERY
+        );
         $sth->execute([$_GET['queue']]);?>    
 
         <div class="row">  
@@ -152,14 +166,14 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
             <div class="card col-md-6">   
               <h5 class="card-title"><b><?php echo strtoupper($row['name']); ?></b></h5>
               <div class="row">       
-                <div class="col-sm">
-                  <div class="card">
+                <div class="col-sm-4">
+                  <div class="card" style="height: 96%">
                     <!-- <div class="card-body"> -->
-                      <canvas id="circle-<?php echo $row['name']; ?>"></canvas>
+                      <canvas id="circle-<?php echo $row['name']; ?>" style="height: 100%"></canvas>
                     <!-- </div> -->
                   </div>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-8">
                   <div class="card">
                     <!-- <div class="body"> -->
                       <canvas id="line-<?php echo $row['name']; ?>"></canvas>
@@ -170,6 +184,18 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
             </div> 
           <?php
           } ?>
+            <div class="card col-md-6">   
+              <h5 class="card-title"><b>URA</b></h5>
+              <div class="row">       
+                <div class="col-sm-12">
+                  <div class="card">
+                    <!-- <div class="body"> -->
+                      <canvas id="ura"></canvas>
+                    <!-- </div> -->
+                  </div>
+                </div> 
+              </div> 
+            </div> 
         </div>
       </div>
     </div>
@@ -274,28 +300,26 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
   <script src="index_files/demo.js"></script>
   <script>
     $(document).ready(function() {
+        function queueSelection() {
+            var urlParams = new URLSearchParams(location.search);
+            if (urlParams.has('queue')) return;
 
-      function queueSelection() {
-          var urlParams = new URLSearchParams(location.search);
-          if (urlParams.has('queue')) return;
 
+            $.get("queues.php", function (data) {
+                $.each(data, function (key, value) {
+                    $('#queueSelection').append('<option value=' + value.queue + '>' + value.nome + '</option>');
+                });
+            });
+            var modalEscolheFila = $('#modalEscolheFila').modal({
+                keyboard: false,
+                backdrop: false,
+            });
 
-          $.get("queues.php", function (data) {
-              $.each(data, function (key, value) {
-                  $('#queueSelection').append('<option value=' + value.queue + '>' + value.queue + '</option>');
-              });
-          });
-          var modalEscolheFila = $('#modalEscolheFila').modal({
-              keyboard: false,
-              backdrop: false,
-          });
-
-          $('#buttonEscolheFila').on('click', function (event) {
-              //alert($('#queueSelection').val());
-              window.location.href = '?queue=' + $('#queueSelection').val();
-              modalEscolheFila.modal('hide');
-          })
-      }
+            $('#buttonEscolheFila').on('click', function (event) {
+                window.location.href = '?queue=' + $('#queueSelection').val();
+                modalEscolheFila.modal('hide');
+            })
+        }
       queueSelection();
 
       $('#modalShow').on('click', function  modalShow(){
@@ -305,66 +329,65 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
           return false;
       });
 
-      $('#modalCRUDConfig').on('hide.bs.modal', function () {
-          document.location.reload(true);
+        $('#modalCRUDConfig').on('hide.bs.modal', function () {
+            document.location.reload(true);
 
-      })
+        })
 
-      var metrics = [];
-      function configTable(){
-          $("#test-table").FullTable({
-              "alwaysCreating":true,
-              "fields": {
-                  "metric":{
-                      "options": metrics,
-                      "mandatory":true,
-                      "placeholder":"Escolha",
-                      "errors":{
-                          "mandatory":"Métrica é obrigatória"
-                      }
-                  },
-                  "name":{
-                      "type":"string",
-                      "mandatory":true,
-                      "errors":{
-                          "type":"Deve ser um número",
-                          "mandatory":"campo obrigatório",
-                      }
-                  },
-                  "sla":{
-                      "type":"integer",
-                      "mandatory":true,
-                      "errors":{
-                          "type":"Deve ser um número",
-                          "mandatory":"campo obrigatório",
-                      }
-                  },
-                  "window":{
-                      "type":"integer",
-                      "mandatory":true,
-                      "errors":{
-                          "type":"Deve ser um número",
-                          "mandatory":"campo obrigatório",
-                      }
-                  },
-                  "refresh":{
-                      "type":"integer",
-                      "mandatory":true,
-                      "errors":{
-                          "type":"Deve ser um número",
-                          "mandatory":"campo obrigatório",
-                      }
-                  },
-              },
-          });
+        var metrics = [];
+        function configTable(){
+            $("#test-table").FullTable({
+                "alwaysCreating":true,
+                "fields": {
+                    "metric":{
+                        "options": metrics,
+                        "mandatory":true,
+                        "placeholder":"Escolha",
+                        "errors":{
+                            "mandatory":"Métrica é obrigatória"
+                        }
+                    },
+                    "name":{
+                        "type":"integer",
+                        "mandatory":true,
+                        "errors":{
+                            "type":"Deve ser um número",
+                            "mandatory":"campo obrigatório",
+                        }
+                    },
+                    "sla":{
+                        "type":"integer",
+                        "mandatory":true,
+                        "errors":{
+                            "type":"Deve ser um número",
+                            "mandatory":"campo obrigatório",
+                        }
+                    },
+                    "window":{
+                        "type":"integer",
+                        "mandatory":true,
+                        "errors":{
+                            "type":"Deve ser um número",
+                            "mandatory":"campo obrigatório",
+                        }
+                    },
+                    "refresh":{
+                        "type":"integer",
+                        "mandatory":true,
+                        "errors":{
+                            "type":"Deve ser um número",
+                            "mandatory":"campo obrigatório",
+                        }
+                    },
+                },
+            });
 
-          $("#buttonCRUDConfig").on("click", function(event) {
-              console.log($("#test-table").FullTable("getData"));
-              data = $("#test-table").FullTable("getData");
-              $.ajax({
-                  url: 'configs.php',
-                  type: 'POST',
-                  data:  { dados: JSON.stringify (data)} ,
+            $("#buttonCRUDConfig").on("click", function(event) {
+                data = $("#test-table").FullTable("getData");
+                $.ajax({
+                    url: 'configs.php',
+                    type: 'POST',
+                    data:  { dados: JSON.stringify (data)} ,
                 }).done(function () {
                   document.location.reload(true);
               });
@@ -528,12 +551,14 @@ foreach ($metrics as $metric) {
                 data: data.data,
                 backgroundColor: ['rgba(70, 191, 189,.21)'],
                 borderColor: ['rgba(90, 211, 209, .7)'],
-                borderWidth: 2
+                borderWidth: 2,
+                pointRadius:0
               }]
             },
             options: {
               responsive: true,
-              animation: false
+              animation: false,
+              legend: {display: false}
             }
           });
         //doughnut
@@ -543,6 +568,7 @@ foreach ($metrics as $metric) {
             type: 'doughnut',
             data: {
                 label: data.donnut.label,
+                pointRadius: 0,
                 labels: ["Atual", "Restante"],
                 datasets: [{
                     data: [data.donnut.atual, data.donnut.setting],
@@ -564,6 +590,33 @@ foreach ($metrics as $metric) {
 }?>
 <?php
 }?>
+
+
+atualizaUra = function() {
+    $.get( "update.php?type=ura", function( data ) {
+        var ctxB = document.getElementById("ura").getContext('2d');
+        var myBarChart = new Chart(ctxB, {
+            type: 'bar',
+            data: data,
+            options: {
+                animation: false,
+                legend: {display: false},
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        setTimeout(atualizaUra, 10000);
+    });
+}
+atualizaUra();
+
+
+
 });
   </script>
 

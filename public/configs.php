@@ -36,21 +36,22 @@ if(isset($_POST['dados']) && !empty($_POST['dados'])){
     $query->execute();    
   }
   $conn->commit();
-  
-   return;
-}else{
-    
-    $sth = $conn->prepare(
-        <<<QUERY
-      SELECT id, queue, sla, window, refresh, metric_id
-      FROM config
-      QUERY
-        );
-    $sth->execute();
-    $data = $sth->fetchAll(\PDO::FETCH_ASSOC);
-    
-    header('Content-Type: application/json');
-    echo json_encode($data);
+
+} else {
+  $sth = $conn->prepare(
+    <<<QUERY
+SELECT c.id, c.queue, c.sla, c.window, c.refresh, c.metric_id
+FROM config c
+JOIN metric m ON m.id = c.metric_id
+ORDER BY queue, m.name
+QUERY
+  );
+  $sth->execute();
+  while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {
+    $data[] = $row;
+    }
+
+  $sth->execute();
 }
-
-
+header('Content-Type: application/json');
+echo json_encode($data);
