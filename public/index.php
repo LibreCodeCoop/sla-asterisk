@@ -1245,57 +1245,22 @@ body.swal2-no-backdrop .swal2-shown {
             transform: rotate(360deg); } }</style><script type="text/javascript" charset="UTF-8" src="index_files/common.js"></script><script type="text/javascript" charset="UTF-8" src="index_files/util.js"></script><script type="text/javascript" charset="UTF-8" src="index_files/AuthenticationService.Authenticate"></script></head>
 
 <body class="">
-  <!-- Extra details for Live View on GitHub Pages -->
-  <div class="wrapper ">
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
-      <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
-        Tip 2: you can also add an image using data-image tag
-    --><?php /*?>
-      <div class="logo">
-        <a href="http://www.creative-tim.com/" class="simple-text logo-normal">
-          Kaf RIO
-        </a>
-      </div><?php */?>
-      <div class="sidebar-wrapper">
-        <ul class="nav"><?php /*?>
-          <li class="nav-item active  ">
-            <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/dashboard.html">
-              <i class="material-icons">dashboard</i>
-              <p>Dashboard</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/user.html">
-              <i class="material-icons">person</i>
-              <p>Perfil de usuário</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/tables.html">
-              <i class="material-icons">notifications</i>
-              <p>Relatório de pausa</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="https://demos.creative-tim.com/material-dashboard/examples/typography.html">
-              <i class="material-icons">content_paste</i>
-              <p>Indicadores por mês</p>
-            </a>
-          </li><?php */?>
-            <li class="nav-item ">
-                <a class="nav-link" href="#" id="modalShow">
-                    <i class="material-icons">content_paste</i>
-                    <p>Configuraçãoes</p>
-                </a>
-            </li>
-        </ul>
-      </div>
-    <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-1.jpg) "></div></div>
-    <div class="main-panel">
+  <div class="wrapper">
+    <div class="main-panel full-width">
       <div class="content">
-        <div class="container-fluid"><?php
+        <div class="row">  
+        	<div class="col-md-8">  
+          		<button type="submit" class="btn btn-primary pull-left" id="modalShow">Configurações</button>
+          	</div>
+          	<div class="col-md-2">
+          		<a href="/relatorio.php" class="btn btn-info pull-right">Relatório histórico</a>
+          	</div>    
+          	<div class="col-md-2">
+          		<a href="/relatorio_abandono.php" class="btn btn-info pull-right">Relatório abandono</a>
+          	</div>    
+        </div>
+      
+        <?php
         require_once '../bootstrap.php';
         
         $sth = $conn->prepare(
