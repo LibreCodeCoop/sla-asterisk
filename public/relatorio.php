@@ -100,16 +100,16 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                       </th>                      
                       <th>
                             <?php 
-                            $sth = $conn->prepare('SELECT DISTINCT metric_id FROM dashboard.history order by metric_id;');
+                            $sth = $conn->prepare('SELECT metric_id, metric.name FROM history JOIN metric ON metric.id = history.metric_id GROUP BY metric_id, metric.name order by metric_id;');
                             $sth->execute();    
-                            $array = $sth->fetchAll(\PDO::FETCH_COLUMN);
-                            $values = implode(",", $array);
+                            $array = $sth->fetchAll(\PDO::FETCH_ASSOC);
+                            $values = implode(",", array_column($array, 'metric_id'));
                             $sth->execute();
                             ?>
                             <select name="metric_id">
                             	<option value="<?php echo $values;?>">ESCOLHA A MÉTRICA</option>
-                            	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
-                      				<option value="<?php echo $row['metric_id'];?>"><?php echo $row['metric_id'];?></option>                   
+                            	<?php foreach ($array as $row) {?>
+                      				<option value="<?php echo $row['metric_id'];?>"><?php echo $row['name'];?></option>                   
                   				<?php } ?>
                   			</select>                    
                       </th>                      
