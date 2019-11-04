@@ -84,16 +84,17 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                   	<tr>
                       <th>
                             <?php 
-                            $sth = $conn->prepare('SELECT DISTINCT queue FROM dashboard.history order by queue;');
+                            $sth = $conn->prepare('SELECT DISTINCT queue, descr FROM dashboard.history JOIN asterisk.queues_config ON queue = extension order by queue;');
                             $sth->execute();
-                            $array = $sth->fetchAll(\PDO::FETCH_COLUMN);    
-                            $values = implode(",", $array);
+                            $array = $sth->fetchAll(\PDO::FETCH_ASSOC);
+                            $queues = array_column($array, 'queue');
+                            $values = implode(",", $queues);
                             $sth->execute();
                             ?>
                             <select name="queue">
                             	<option value="<?php echo $values;?>">ESCOLHA A QUEUE</option>
                             	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
-                      				<option value="<?php echo $row['queue'];?>"><?php echo $row['queue'];?></option>                   
+                      				<option value="<?php echo $row['queue'];?>"><?php echo $row['queue'].' - '.$row['descr'];?></option>
                   				<?php } ?>
                   			</select>                    
                       </th>                      
@@ -118,7 +119,7 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                             $sth->execute();                            
                             ?>
                             <select name="data_inicio" required>
-                            	<option value="">ESCOLHA A DATA INÍCIO</option>
+                            	<option value="">ESCOLHA A DATA INÍCI  O</option>
                             	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
                       				<option value="<?php echo $row['created'].":00:00";?>"><?php echo $row['created_formated'];?></option>                   
                   				<?php } ?>
