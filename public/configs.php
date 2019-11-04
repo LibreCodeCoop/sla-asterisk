@@ -31,8 +31,10 @@ $request = json_decode($_POST['dados']);
 } else {
   $sth = $conn->prepare(
     <<<QUERY
-SELECT id, queue, sla, window, refresh, metric_id
-FROM config
+SELECT c.id, c.queue, c.sla, c.window, c.refresh, c.metric_id
+FROM config c
+JOIN metric m ON m.id = c.metric_id
+ORDER BY queue, m.name
 QUERY
   );
   $sth->execute();
