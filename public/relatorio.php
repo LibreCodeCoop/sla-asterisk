@@ -119,7 +119,7 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                             $sth->execute();                            
                             ?>
                             <select name="data_inicio" required>
-                            	<option value="">ESCOLHA A DATA INÍCI  O</option>
+                            	<option value="">ESCOLHA A DATA INÍCIO</option>
                             	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
                       				<option value="<?php echo $row['created'].":00:00";?>"><?php echo $row['created_formated'];?></option>                   
                   				<?php } ?>

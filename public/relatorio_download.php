@@ -56,7 +56,6 @@ if ($_POST['relatorio_historico']) {
     
 }
 
-
 $fp = fopen('php://output', 'wb');
 foreach ($user_CSV as $line) {
     // though CSV stands for "comma separated value"
@@ -64,4 +63,3 @@ foreach ($user_CSV as $line) {
     fputcsv($fp, $line, ',');
 }
 fclose($fp);
-?>

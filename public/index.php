@@ -18,7 +18,52 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
 <html data-cbscriptallow="true" class="perfect-scrollbar-off" lang="en">
-<script async="" src="index_files/fbevents.js"></script><script async="" src="index_files/gtm.js"></script><script>(function () {
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://demos.creative-tim.com/material-dashboard/assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="https://demos.creative-tim.com/material-dashboard/assets/img/favicon.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Material Dashboard by Creative Tim https://demos.creative-tim.com/material-dashboard/examples/dashboard.html</title>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport">
+  <!-- Extra details for Live View on GitHub Pages -->
+  <!-- Canonical SEO -->
+  <link rel="canonical" href="https://www.creative-tim.com/product/material-dashboard">
+  <!--  Social tags      -->
+  <meta name="keywords" content="creative tim, html dashboard, html css dashboard, web dashboard, bootstrap 4 dashboard, bootstrap 4, css3 dashboard, bootstrap 4 admin, material dashboard bootstrap 4 dashboard, frontend, responsive bootstrap 4 dashboard, free dashboard, free admin dashboard, free bootstrap 4 admin dashboard">
+  <meta name="description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
+  <!-- Schema.org markup for Google+ -->
+  <meta itemprop="name" content="Material Dashboard by Creative Tim">
+  <meta itemprop="description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
+  <meta itemprop="image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg">
+  <!-- Twitter Card data -->
+  <meta name="twitter:card" content="product">
+  <meta name="twitter:site" content="@creativetim">
+  <meta name="twitter:title" content="Material Dashboard by Creative Tim">
+  <meta name="twitter:description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
+  <meta name="twitter:creator" content="@creativetim">
+  <meta name="twitter:image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg">
+  <!-- Open Graph data -->
+  <meta property="fb:app_id" content="655968634437471">
+  <meta property="og:title" content="Material Dashboard by Creative Tim">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://demos.creative-tim.com/material-dashboard/examples/dashboard.html">
+  <meta property="og:image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg">
+  <meta property="og:description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
+  <meta property="og:site_name" content="Creative Tim">
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="index_files/css.css">
+  <link rel="stylesheet" href="index_files/font-awesome.css">
+  <!-- CSS Files -->
+  <link href="index_files/material-dashboard.css" rel="stylesheet">
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href="index_files/demo.css" rel="stylesheet">
+  <link href="index_files/custom.css" rel="stylesheet">
+  <script type="text/javascript" charset="UTF-8" src="index_files/common.js"></script>
+  <script type="text/javascript" charset="UTF-8" src="index_files/util.js"></script>
+  <script type="text/javascript" charset="UTF-8" src="index_files/AuthenticationService.Authenticate"></script>
+ 
+<script>(function () {
   const toBlob = HTMLCanvasElement.prototype.toBlob;
   const toDataURL = HTMLCanvasElement.prototype.toDataURL;
   const getImageData = CanvasRenderingContext2D.prototype.getImageData;
@@ -71,47 +116,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
   document.documentElement.dataset.cbscriptallow = true;
 })()
 </script>
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta charset="utf-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="https://demos.creative-tim.com/material-dashboard/assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="https://demos.creative-tim.com/material-dashboard/assets/img/favicon.png">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Material Dashboard by Creative Tim https://demos.creative-tim.com/material-dashboard/examples/dashboard.html</title>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport">
-  <!-- Extra details for Live View on GitHub Pages -->
-  <!-- Canonical SEO -->
-  <link rel="canonical" href="https://www.creative-tim.com/product/material-dashboard">
-  <!--  Social tags      -->
-  <meta name="keywords" content="creative tim, html dashboard, html css dashboard, web dashboard, bootstrap 4 dashboard, bootstrap 4, css3 dashboard, bootstrap 4 admin, material dashboard bootstrap 4 dashboard, frontend, responsive bootstrap 4 dashboard, free dashboard, free admin dashboard, free bootstrap 4 admin dashboard">
-  <meta name="description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
-  <!-- Schema.org markup for Google+ -->
-  <meta itemprop="name" content="Material Dashboard by Creative Tim">
-  <meta itemprop="description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
-  <meta itemprop="image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg">
-  <!-- Twitter Card data -->
-  <meta name="twitter:card" content="product">
-  <meta name="twitter:site" content="@creativetim">
-  <meta name="twitter:title" content="Material Dashboard by Creative Tim">
-  <meta name="twitter:description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
-  <meta name="twitter:creator" content="@creativetim">
-  <meta name="twitter:image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg">
-  <!-- Open Graph data -->
-  <meta property="fb:app_id" content="655968634437471">
-  <meta property="og:title" content="Material Dashboard by Creative Tim">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://demos.creative-tim.com/material-dashboard/examples/dashboard.html">
-  <meta property="og:image" content="https://s3.amazonaws.com/creativetim_bucket/products/50/opt_md_thumbnail.jpg">
-  <meta property="og:description" content="Material Dashboard is a Free Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
-  <meta property="og:site_name" content="Creative Tim">
-  <!--     Fonts and icons     -->
-  <link rel="stylesheet" type="text/css" href="index_files/css.css">
-  <link rel="stylesheet" href="index_files/font-awesome.css">
-  <!-- CSS Files -->
-  <link href="index_files/material-dashboard.css" rel="stylesheet">
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="index_files/demo.css" rel="stylesheet">
-  <link href="index_files/custom.css" rel="stylesheet">
 </head>
 
 <body class="">
@@ -220,19 +224,19 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                     <h5 class="modal-title" id="exampleModalLabel">Qual fila deseja monitorar?</h5>
                 </div>
                 <div class="modal-body">
-                    <table class="fulltable fulltable-editable" id="test-table">
-                        <thead>
-                        <tr>
-                            <th fulltable-field-name="name">Nome</th>
-                            <th fulltable-field-name="sla">SLA</th>
-                            <th fulltable-field-name="window">Window</th>
-                            <th fulltable-field-name="refresh">Refresh</th>
-                            <th fulltable-field-name="metric">Métrica</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tBodyConfig">
-                        </tbody>
-                    </table>
+                  <table class="fulltable fulltable-editable" id="test-table">
+                    <thead>
+                      <tr>
+                          <th fulltable-field-name="name">Nome</th>
+                          <th fulltable-field-name="sla">SLA</th>
+                          <th fulltable-field-name="window">Window</th>
+                          <th fulltable-field-name="refresh">Refresh</th>
+                          <th fulltable-field-name="metric">Métrica</th>
+                          <th fulltable-field-name="id" style="display: none">ID</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tBodyConfig"></tbody>
+                  </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -296,7 +300,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
   <script src="index_files/demo.js"></script>
   <script>
     $(document).ready(function() {
-
         function queueSelection() {
             var urlParams = new URLSearchParams(location.search);
             if (urlParams.has('queue')) return;
@@ -319,13 +322,12 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
         }
       queueSelection();
 
-        $('#modalShow').on('click', function  modalShow(){
+      $('#modalShow').on('click', function  modalShow(){
 
-            configTable();
-            $('#modalCRUDConfig').modal();
-            return false;
-        });
-
+          configTable();
+          $('#modalCRUDConfig').modal();
+          return false;
+      });
 
         $('#modalCRUDConfig').on('hide.bs.modal', function () {
             document.location.reload(true);
@@ -387,12 +389,12 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                     type: 'POST',
                     data:  { dados: JSON.stringify (data)} ,
                 }).done(function () {
-                    document.location.reload(true);
-                });
+                  document.location.reload(true);
+              });
 
-            });
+          });
 
-            $("#test-table").FullTable("draw");
+          $("#test-table").FullTable("draw");
         }
         function modalCRUDConfig() {
 
@@ -401,17 +403,18 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
               async: false,
           }).done(function( data ) {
 
-              for(var i = 0; i < data.length; i++){
+            for(var i = 0; i < data.length; i++){
 
-                  $('#tBodyConfig').append(
-                      '<tr>' +
-                      '<td><span>' +  data[i].queue + '</span></td>' +
-                      '<td><span>' +  data[i].sla + '</span></td>' +
-                      '<td><span>' +  data[i].window + '</span></td>' +
-                      '<td><span>' +  data[i].refresh + '</span></td>' +
-                      '<td><span>' +  data[i].metric_id + '</span></td>' +
-                      '</tr>');
-              }
+                $('#tBodyConfig').append(
+                    '<tr>' +
+                    '<td><span>' +  data[i].queue + '</span></td>' +
+                    '<td><span>' +  data[i].sla + '</span></td>' +
+                    '<td><span>' +  data[i].window + '</span></td>' +
+                    '<td><span>' +  data[i].refresh + '</span></td>' +
+                    '<td><span>' +  data[i].metric_id + '</span></td>' +
+                    '<td style="display:none"><span>' +  data[i].id + '</span></td>' +
+                    '</tr>');
+            }
           });
 
           $.ajax({
@@ -425,7 +428,7 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
           });
       }
 
-        modalCRUDConfig();
+      modalCRUDConfig();
 
       $().ready(function() {
         $sidebar = $('.sidebar');
@@ -444,7 +447,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
           if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
             $('.fixed-plugin .dropdown').addClass('open');
           }
-
         }
 
         $('.fixed-plugin a').click(function(event) {
@@ -498,99 +500,6 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
 
 
           var new_image = $(this).find("img").attr('src');
-
-          if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-            $sidebar_img_container.fadeOut('fast', function() {
-              $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-              $sidebar_img_container.fadeIn('fast');
-            });
-          }
-
-          if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-            var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-
-            $full_page_background.fadeOut('fast', function() {
-              $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-              $full_page_background.fadeIn('fast');
-            });
-          }
-
-          if ($('.switch-sidebar-image input:checked').length == 0) {
-            var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
-            var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
-
-            $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-            $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-          }
-
-          if ($sidebar_responsive.length != 0) {
-            $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
-          }
-        });
-
-        $('.switch-sidebar-image input').change(function() {
-          $full_page_background = $('.full-page-background');
-
-          $input = $(this);
-
-          if ($input.is(':checked')) {
-            if ($sidebar_img_container.length != 0) {
-              $sidebar_img_container.fadeIn('fast');
-              $sidebar.attr('data-image', '#');
-            }
-
-            if ($full_page_background.length != 0) {
-              $full_page_background.fadeIn('fast');
-              $full_page.attr('data-image', '#');
-            }
-
-            background_image = true;
-          } else {
-            if ($sidebar_img_container.length != 0) {
-              $sidebar.removeAttr('data-image');
-              $sidebar_img_container.fadeOut('fast');
-            }
-
-            if ($full_page_background.length != 0) {
-              $full_page.removeAttr('data-image', '#');
-              $full_page_background.fadeOut('fast');
-            }
-
-            background_image = false;
-          }
-        });
-
-        $('.switch-sidebar-mini input').change(function() {
-          $body = $('body');
-
-          $input = $(this);
-
-          if (md.misc.sidebar_mini_active == true) {
-            $('body').removeClass('sidebar-mini');
-            md.misc.sidebar_mini_active = false;
-
-            $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
-
-          } else {
-
-            $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
-
-            setTimeout(function() {
-              $('body').addClass('sidebar-mini');
-
-              md.misc.sidebar_mini_active = true;
-            }, 300);
-          }
-
-          // we simulate the window Resize so the charts will get updated in realtime.
-          var simulateWindowResize = setInterval(function() {
-            window.dispatchEvent(new Event('resize'));
-          }, 180);
-
-          // we stop the simulation of Window Resize after the animations are completed
-          setTimeout(function() {
-            clearInterval(simulateWindowResize);
-          }, 1000);
 
         });
       });
