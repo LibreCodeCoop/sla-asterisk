@@ -303,4 +303,6 @@ if ($line) {
         fputcsv($fp, $line, ',');
     }
     fclose($fp);
+} else {
+    echo "nenhum registro encontrado para o filtro informado";
 }
