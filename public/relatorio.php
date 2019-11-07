@@ -52,7 +52,7 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                             $sth->execute();
                             ?>
                             <select class="form-control" name="queue">
-                            	<option value="<?php echo $values;?>">Escolha a fila</option>
+                            	<option value="<?php echo $values;?>">Todas as filas</option>
                             	<?php while ($row = $sth->fetch(\PDO::FETCH_ASSOC)) {?>
                       				<option value="<?php echo $row['queue'];?>"><?php echo $row['queue'].' - '.$row['descr'];?></option>
                   				<?php } ?>
@@ -68,7 +68,7 @@ https://mdbootstrap.com/docs/jquery/javascript/charts/
                             $sth->execute();
                             ?>
                             <select class="form-control" name="metric_id">
-                            	<option value="<?php echo $values;?>">Escolha a métrica</option>
+                            	<option value="<?php echo $values;?>">Todas as métricas</option>
                             	<?php foreach ($array as $row) {?>
                       				<option value="<?php echo $row['metric_id'];?>"><?php echo $row['name'];?></option>                   
                   				<?php } ?>
