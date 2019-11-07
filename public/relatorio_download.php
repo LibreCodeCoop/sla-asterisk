@@ -262,6 +262,59 @@ if(isset($_POST['type'])) {
             );
             $sth->execute([$_POST['data_inicio'], $_POST['data_fim']]);
             break;
+        case 'ura':
+            $sth = $conn->prepare(<<<QUERY
+                SELECT *
+                  FROM (
+                        -- Completa
+                        SELECT md.`data` AS data_ligacao,
+                               qsm.clid AS telefone,
+                               CONCAT(id.name, '-',md.opcao) AS ura,
+                               qsm.queue,
+                               'Completa' AS status
+                          FROM qstats.queue_stats_mv qsm
+                          JOIN kaf.menudata md ON md.numero = qsm.clid
+                          JOIN asterisk.ivr_details id
+                            ON SUBSTRING(md.menu, 5) = id.id
+                          WHERE clid <> ''
+                            AND qsm.event LIKE 'COMPLETE%'
+                            AND clid > 10000
+                           AND md.`data` BETWEEN ? AND ?
+                          UNION
+                        -- Abandono na fila
+                        SELECT md.`data` AS data_ligacao,
+                               qsm.clid AS telefone,
+                               CONCAT(id.name, '-',md.opcao) AS ura,
+                               qsm.queue,
+                               'Abandono fila' AS status
+                          FROM qstats.queue_stats_mv qsm
+                          JOIN kaf.menudata md ON md.numero = qsm.clid
+                          JOIN asterisk.ivr_details id
+                            ON SUBSTRING(md.menu, 5) = id.id
+                         WHERE clid <> ''
+                           AND event = 'ABANDON'
+                           AND clid > 10000
+                           AND md.`data` BETWEEN ? AND ?
+                         UNION
+                        -- Abandono na URA
+                        SELECT cdr.calldate AS data_ligacao,
+                               cdr.src AS telefone,
+                               id.name AS ura,
+                               null AS queue,
+                               'Abandono ura' AS status
+                          FROM asteriskcdrdb.cdr
+                          JOIN asterisk.ivr_details id
+                            ON SUBSTRING(dcontext, 5) = id.id
+                         WHERE dcontext LIKE 'ivr-%'
+                           AND id.name NOT LIKE '%Pesquisa%'
+                           AND cdr.src > 10000
+                           AND cdr.calldate BETWEEN ? AND ?
+                       ) x
+                 ORDER BY x.queue, x.data_ligacao
+                QUERY
+            );
+            $sth->execute([$_POST['data_inicio'], $_POST['data_fim'],$_POST['data_inicio'], $_POST['data_fim'],$_POST['data_inicio'], $_POST['data_fim']]);
+            break;
     }
 } else {
     if ($_POST['relatorio_historico']) {
@@ -304,5 +357,6 @@ if ($line) {
     }
     fclose($fp);
 } else {
+    $sth->debugDumpParams();
     echo "nenhum registro encontrado para o filtro informado";
 }

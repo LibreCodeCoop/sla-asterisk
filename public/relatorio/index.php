@@ -32,6 +32,7 @@
                                 <option value="volumetria">Volumetria</option>
                                 <option value="pausas" disabled>Pausas</option>
                                 <option value="analitico_ligacoes">Analítico das Ligações</option>
+                                <option value="ura">URA</option>
                               </select>
                               <br>
                       </th>
