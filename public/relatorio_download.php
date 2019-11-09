@@ -40,15 +40,15 @@ if(isset($_POST['type'])) {
                        SUM(CASE WHEN event = 'ABANDON' AND info2 <= 20 THEN 1 ELSE 0 END) aband_20s,
                        SUM(CASE WHEN event = 'ABANDON' AND info2 BETWEEN 21 AND 60 THEN 1 ELSE 0 END) aband_21s_60s,
                        SUM(CASE WHEN event = 'ABANDON' AND info2 > 60 THEN 1 ELSE 0 END) aband_61s,
+                       SEC_TO_TIME(COALESCE(SUM(info2) / SUM(CASE WHEN info2 > 0 THEN 1 ELSE 0 END), 0)) AS TMA,
+                       SEC_TO_TIME(COALESCE(SUM(info1) / COUNT(*), 0)) AS tme,
                        SEC_TO_TIME(COALESCE(
-                            SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN info2 ELSE 0 END) /
+                            (
+                                SUM(info2) +
+                                SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN 30 ELSE 0 END)
+                            ) /
                             SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN 1 ELSE 0 END
-                       ), 0)) AS tma,
-                       SEC_TO_TIME(COALESCE(
-                            SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN info1 ELSE 0 END) /
-                            SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN 1 ELSE 0 END
-                       ), 0)) AS tme,
-                       null AS tmo
+                       ), 0)) AS tmo
                   FROM qstats.queue_stats_mv qsm
                  WHERE event IN ('ABANDON', 'COMPLETECALLER', 'COMPLETEAGENT')
                    AND clid > 10000
@@ -133,8 +133,14 @@ if(isset($_POST['type'])) {
                        COUNT(*) AS qtd_recebidas,
                        SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN 1 ELSE 0 END) AS qtd_atendidas,
                        SEC_TO_TIME(COALESCE(SUM(info2) / SUM(CASE WHEN info2 > 0 THEN 1 ELSE 0 END), 0)) AS TMA,
-                       SEC_TO_TIME(COALESCE(SUM(info1) / SUM(CASE WHEN info1 > 0 THEN 1 ELSE 0 END), 0)) AS TME,
-                       SEC_TO_TIME(0) AS TMO,
+                       SEC_TO_TIME(COALESCE(SUM(info1) / COUNT(*), 0)) AS TME,
+                       SEC_TO_TIME(COALESCE(
+                            (
+                                SUM(info2) +
+                                SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN 30 ELSE 0 END)
+                            ) /
+                            SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN 1 ELSE 0 END
+                       ), 0)) AS TMO,
                        SUM(CASE WHEN event = 'ABANDON' THEN 1 ELSE 0 END) AS qtd_abandonadas,
                        COUNT(DISTINCT qsmv.agent) AS qtd_operadores,
                        SEC_TO_TIME(0) AS tempo_falado_ativo,
