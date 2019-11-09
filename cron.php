@@ -1,6 +1,5 @@
 <?php
 require_once 'bootstrap.php';
-
 // TMO
 $sth = $conn->prepare(
     <<<QUERY
