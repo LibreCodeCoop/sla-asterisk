@@ -20,6 +20,18 @@ $sth = $conn->prepare(
 );
 $sth->execute();
 
+// Fila
+$content = shell_exec('curl http://10.8.0.232:15000');
+preg_match_all('/(?P<queue>\d+) has (?P<calls>\d+) calls/', $content, $matches);
+foreach ($matches['queue'] as $key => $queue) {
+    $sth = $conn->prepare(
+        <<<QUERY
+        INSERT INTO history (queue, sla, metric_id) VALUES (?, ?, ?)
+        QUERY
+        );
+    $sth->execute([$queue, $matches['calls'][$key], 4]);
+}
+
 // TMA
 $sth = $conn->prepare(
     <<<QUERY
