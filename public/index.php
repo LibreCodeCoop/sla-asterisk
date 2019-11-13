@@ -365,14 +365,17 @@ Chart.plugins.register({
       ctx.font = fontSize + "px Arial";
       ctx.textBaseline = "middle";
 
-      var totalSeconds = chart.config.data.datasets[0].data[0];
-      hours = Math.floor(totalSeconds / 3600);
-      totalSeconds %= 3600;
-      minutes = Math.floor(totalSeconds / 60);
-      seconds = totalSeconds % 60;
-      var text = (("00" + minutes).slice(-2)) + ":" + (("00" + seconds).slice(-2));
-      if (hours) {
-          text = (("00" + hours).slice(-2)) + ":" +  text
+      var text = chart.config.data.datasets[0].data[0];
+      if (chart.canvas.id != 'circle-Fila') {
+          var totalSeconds = text;
+          hours = Math.floor(totalSeconds / 3600);
+          totalSeconds %= 3600;
+          minutes = Math.floor(totalSeconds / 60);
+          seconds = totalSeconds % 60;
+          text = (("00" + minutes).slice(-2)) + ":" + (("00" + seconds).slice(-2));
+          if (hours) {
+              text = (("00" + hours).slice(-2)) + ":" +  text
+          }
       }
 
       var textX = Math.round((width - ctx.measureText(text).width) / 2),

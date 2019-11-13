@@ -5,15 +5,18 @@ $sth = $conn->prepare(
     <<<QUERY
     INSERT INTO history (queue, sla, metric_id)
     SELECT c.queue,
-           COALESCE((SUM(info2)+count(*)*30)/count(*), 0) AS sla,
+           COALESCE(SUM(info2)/count(*)+qd.data, 0) AS sla,
            c.metric_id
       FROM config c
       LEFT JOIN qstats.queue_stats_mv ST
         ON c.queue = ST.queue
-       AND c.metric_id = 1
+       AND c.metric_id = 3
        AND ST.event IN ('COMPLETECALLER', 'COMPLETEAGENT')
        AND ST.datetime >= DATE_SUB(NOW(), INTERVAL c.window second)
-     WHERE c.metric_id = 1
+      JOIN asterisk.queues_details qd
+        ON qd.id = c.queue
+       AND qd.keyword = 'wrapuptime'
+     WHERE c.metric_id = 3
        AND c.id IS NOT NULL
      GROUP BY c.queue
     QUERY
