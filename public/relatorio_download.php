@@ -68,8 +68,8 @@ if(isset($_POST['type'])) {
                             ELSE name END AS operador,
                        number as login,
                        DATE_FORMAT(qsmv.`datetime`, '%Y-%m-%d') AS data,
-                       primeiro_login.datetime AS primeiro_login,
-                       ultimo_logoff.datetime AS ultimo_logoff,
+                       DATE_FORMAT(primeiro_login.datetime, '%Y-%m-%d %H:%i:%s') AS primeiro_login,
+                       DATE_FORMAT(ultimo_logoff.datetime, '%Y-%m-%d %H:%i:%s') AS ultimo_logoff,
                        SUM(CASE WHEN event IN ('COMPLETECALLER', 'COMPLETEAGENT') THEN 1 ELSE 0 END) AS qtde_atendidas_receptivo,
                        0 AS qtde_atendidas_ativo,
                        0 AS qtde_chamadas_discadas_ativo,
@@ -243,8 +243,8 @@ if(isset($_POST['type'])) {
                 SELECT qsmv.queue,
                        'receptivo' AS atividade,
                        qsmv.clid AS telefone_cliente,
-                       qsmv.datetimeconnect AS inicio_ligacao,
-                       qsmv.datetimeend AS final_ligacao,
+                       DATE_FORMAT(qsmv.datetimeconnect, '%Y-%m-%d %H:%i:%s') AS inicio_ligacao,
+                       DATE_FORMAT(qsmv.datetimeend, '%Y-%m-%d %H:%i:%s') AS final_ligacao,
                        TIMEDIFF(qsmv.datetimeend, qsmv.datetimeconnect) AS duracao,
                        CONCAT(id_empresa.name,'-',pd_empresa.opcao,',',id_agente.name,'-',pd_agente.opcao) AS pesquisa_satisfacao_cliente
                   FROM qstats.queue_stats_mv qsmv
@@ -273,7 +273,7 @@ if(isset($_POST['type'])) {
                 SELECT *
                   FROM (
                         -- Completa
-                        SELECT md.`data` AS data_ligacao,
+                        SELECT DATE_FORMAT(md.`data`, '%Y-%m-%d %H:%i:%s') AS data_ligacao,
                                qsm.clid AS telefone,
                                CONCAT(id.name, '-',md.opcao) AS ura,
                                qsm.queue,
@@ -288,7 +288,7 @@ if(isset($_POST['type'])) {
                            AND md.`data` BETWEEN ? AND ?
                           UNION
                         -- Abandono na fila
-                        SELECT md.`data` AS data_ligacao,
+                        SELECT DATE_FORMAT(md.`data`, '%Y-%m-%d %H:%i:%s') AS data_ligacao,
                                qsm.clid AS telefone,
                                CONCAT(id.name, '-',md.opcao) AS ura,
                                qsm.queue,
@@ -303,7 +303,7 @@ if(isset($_POST['type'])) {
                            AND md.`data` BETWEEN ? AND ?
                          UNION
                         -- Abandono na URA
-                        SELECT cdr.calldate AS data_ligacao,
+                        SELECT DATE_FORMAT(cdr.calldate, '%Y-%m-%d %H:%i:%s') AS data_ligacao,
                                cdr.src AS telefone,
                                id.name AS ura,
                                null AS queue,
