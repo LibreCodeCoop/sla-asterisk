@@ -139,7 +139,7 @@
 
 
   <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
   <script>
     $(document).ready(function() {
         function queueSelection() {
@@ -368,10 +368,10 @@ Chart.plugins.register({
       var text = chart.config.data.datasets[0].data[0];
       if (chart.canvas.id != 'circle-Fila') {
           var totalSeconds = text;
-          hours = Math.floor(totalSeconds / 3600);
+          var hours = Math.floor(totalSeconds / 3600);
           totalSeconds %= 3600;
-          minutes = Math.floor(totalSeconds / 60);
-          seconds = totalSeconds % 60;
+          var minutes = Math.floor(totalSeconds / 60);
+          var seconds = totalSeconds % 60;
           text = (("00" + minutes).slice(-2)) + ":" + (("00" + seconds).slice(-2));
           if (hours) {
               text = (("00" + hours).slice(-2)) + ":" +  text
@@ -388,49 +388,46 @@ Chart.plugins.register({
 <?php
 foreach ($metrics as $metric) {
     ?>
+    var chartLine<?php echo $metric['name']; ?>= new Chart(document.getElementById("line-<?php echo $metric['name']; ?>").getContext('2d'), {
+      type: 'line',
+      data: {
+        datasets: [{
+          backgroundColor: ['rgba(70, 191, 189,.21)'],
+          borderColor: ['rgba(90, 211, 209, .7)'],
+          borderWidth: 2,
+          pointRadius:0
+        }]
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        legend: {display: false}
+      }
+    });
+    var donnut<?php echo $metric['name']; ?> = new Chart(document.getElementById("circle-<?php echo $metric['name']; ?>").getContext('2d'), {
+          type: 'doughnut',
+          data: {
+              pointRadius: 0,
+              labels: ["Atual", "Restante"],
+              datasets: [{
+                  backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
+                  hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
+              }]
+          },
+          options: {
+              responsive: true,
+              animation: false
+          }
+      });
     atualiza<?php echo $metric['name']; ?> = function() {
         $.get( "update.php?type=<?php echo $metric['name']; ?>&queue=<?php echo $_GET['queue']; ?>", function( data ) {
-              var ctxL = document.getElementById("line-<?php echo $metric['name']; ?>").getContext('2d');
-              var chart1 = new Chart(ctxL, {
-                type: 'line',
-                data: {
-                  labels: data.labels,
-                  datasets: [{
-                    label: "<?php echo $metric['name']; ?>",
-                    data: data.data,
-                    backgroundColor: ['rgba(70, 191, 189,.21)'],
-                    borderColor: ['rgba(90, 211, 209, .7)'],
-                    borderWidth: 2,
-                    pointRadius:0
-                  }]
-                },
-                options: {
-                  responsive: true,
-                  animation: false,
-                  legend: {display: false}
-                }
-              });
-            //doughnut
-            if (data.donnut) {
-                var ctxD = document.getElementById("circle-<?php echo $metric['name']; ?>").getContext('2d');
-                var chart2 = new Chart(ctxD, {
-                    type: 'doughnut',
-                    data: {
-                        label: data.donnut.label,
-                        pointRadius: 0,
-                        labels: ["Atual", "Restante"],
-                        datasets: [{
-                            data: [data.donnut.atual, data.donnut.setting],
-                            backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
-                            hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        animation: false
-                    }
-                });
-            }
+        	chartLine<?php echo $metric['name']; ?>.data.labels = data.labels;
+            chartLine<?php echo $metric['name']; ?>.data.datasets[0].data = data.data;
+        	chartLine<?php echo $metric['name']; ?>.update();
+        	if (data.donnut) {
+            	donnut<?php echo $metric['name']; ?>.data.datasets[0].data = [data.donnut.atual, data.donnut.setting]
+            	donnut<?php echo $metric['name']; ?>.update();
+        	}
             setTimeout(atualiza<?php echo $metric['name']; ?>, <?php echo $metric['refresh']*1000?>);
         });
     }
