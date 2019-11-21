@@ -391,7 +391,9 @@ foreach ($metrics as $metric) {
     var chartLine<?php echo $metric['name']; ?>= new Chart(document.getElementById("line-<?php echo $metric['name']; ?>").getContext('2d'), {
       type: 'line',
       data: {
+        labels: [],
         datasets: [{
+          data: [],
           backgroundColor: ['rgba(70, 191, 189,.21)'],
           borderColor: ['rgba(90, 211, 209, .7)'],
           borderWidth: 2,
@@ -410,6 +412,7 @@ foreach ($metrics as $metric) {
               pointRadius: 0,
               labels: ["Atual", "Restante"],
               datasets: [{
+                  data: [0,0],
                   backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
                   hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"]
               }]
