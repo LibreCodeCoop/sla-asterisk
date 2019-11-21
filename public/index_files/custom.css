@@ -1,7 +1,3 @@
-html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-}
 @-webkit-keyframes swal2-show {
   0% {
     -webkit-transform: scale(0.7);
